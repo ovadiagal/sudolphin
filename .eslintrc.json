@@ -22,19 +22,18 @@
     "plugin:import/typescript",
     "next",
     "next/core-web-vitals",
-    "plugin:prettier/recommended" // Add this line
+    "plugin:prettier/recommended" // Integrates Prettier with ESLint
   ],
   "plugins": [
     "@typescript-eslint",
     "react",
     "jsx-a11y",
     "import",
-    "prettier" // Add this line
+    "prettier" // Enables Prettier as an ESLint plugin
   ],
   "rules": {
-    // Existing rules...
-    "prettier/prettier": "error", // Add this line to show Prettier errors as ESLint errors
-    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": "error", // Displays Prettier errors as ESLint errors
+    "react/react-in-jsx-scope": "off", // Not needed in Next.js 12+
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "quotes": ["error", "single"]
   }
