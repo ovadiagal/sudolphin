@@ -1,0 +1,35 @@
+name: Lint Code Base
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Specify your Node.js version
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Lint Action
+        uses: wearerequired/lint-action@v2.3.0
+        with:
+          # Command to run lint
+          # If using npm scripts
+          cmd: npm run lint
+          # Optionally, specify the working directory if not the root
+          # working-directory: ./path-to-your-project
+          # Optionally, set the fail on warnings
+          fail-on-warnings: true
