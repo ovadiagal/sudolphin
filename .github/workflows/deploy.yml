@@ -1,0 +1,42 @@
+name: Deploy to Google App Engine
+
+on:
+  push:
+    branches:
+      - main  # Deploy only when the main branch is pushed
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CLOUD_KEY }}'
+
+    - name: Set GCP Project
+      run: gcloud config set project sudolphin
+
+    - name: Set up Docker for Google Cloud
+      run: gcloud auth configure-docker
+
+    - name: Build Docker image
+      run: docker build -t gcr.io/sudolphin/nextjs-app:$GITHUB_SHA .
+
+    - name: Push Docker image to Google Container Registry
+      run: docker push gcr.io/sudolphin/nextjs-app:$GITHUB_SHA
+
+    - name: Deploy to Google App Engine
+      run: |
+        gcloud app deploy --image-url=gcr.io/sudolphin/nextjs-app:$GITHUB_SHA \
+                          --quiet \
+                          --project=sudolphin
