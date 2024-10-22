@@ -1,35 +1,35 @@
-name: Lint Code Base
+name: Lint
 
 on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
   push:
-    branches: [ main, develop ]
+    branches:
+      - main
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - main
 
 jobs:
-  lint:
-    name: Lint
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Check out Git repository
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v1
         with:
-          node-version: '18' # Specify your Node.js version
+          node-version: 12
 
-      - name: Install Dependencies
-        run: npm install
+      # ESLint and Prettier must be in `package.json`
+      - name: Install Node.js dependencies
+        run: npm ci
 
-      - name: Lint Action
-        uses: wearerequired/lint-action@v2.3.0
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
         with:
-          # Command to run lint
-          # If using npm scripts
-          cmd: npm run lint
-          # Optionally, specify the working directory if not the root
-          # working-directory: ./path-to-your-project
-          # Optionally, set the fail on warnings
-          fail-on-warnings: true
+          eslint: true
+          prettier: true
