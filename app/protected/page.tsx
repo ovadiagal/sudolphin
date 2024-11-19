@@ -1,6 +1,5 @@
 import ClassTiles from "@/components/class-tiles";
 import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function ProtectedPage() {
