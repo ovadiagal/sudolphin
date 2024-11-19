@@ -45,7 +45,7 @@ export default function FileGallery({ classId }: { classId: string }) {
           ...file,
           url: publicUrl,
         };
-      })
+      }),
     );
 
     // Filter out unnecessary properties and ensure 'metadata' has 'size'
@@ -83,7 +83,7 @@ export default function FileGallery({ classId }: { classId: string }) {
       fetchFiles(); // Refresh file list
       setUploading(false);
     },
-    [classId]
+    [classId, supabase.storage],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

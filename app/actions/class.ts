@@ -3,7 +3,9 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function createClass(formData: FormData): Promise<{ success: boolean }> {
+export async function createClass(
+  formData: FormData,
+): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
   const {
@@ -30,23 +32,22 @@ export async function createClass(formData: FormData): Promise<{ success: boolea
     throw error;
   }
 
-  revalidatePath('/protected');
+  revalidatePath("/protected");
   return { success: true };
 }
 
-export async function deleteClass(classId: string): Promise<{ success: boolean }> {
+export async function deleteClass(
+  classId: string,
+): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
-  const { error } = await supabase
-    .from("Classes")
-    .delete()
-    .eq('id', classId);
+  const { error } = await supabase.from("Classes").delete().eq("id", classId);
 
   if (error) {
     console.error("Error deleting class:", error);
     throw error;
   }
 
-  revalidatePath('/protected');
+  revalidatePath("/protected");
   return { success: true };
 }
