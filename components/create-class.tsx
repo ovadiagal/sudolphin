@@ -59,10 +59,10 @@ const CreateClass = () => {
     <>
       <div
         onClick={handleOpenModal}
-        className="w-[calc(25%-12px)] h-32 bg-zinc-700 text-white rounded-lg flex flex-col gap-2 items-center justify-center p-2 cursor-pointer"
+        className="w-[calc(25%-12px)] h-32 bg-zinc-200 text-white rounded-lg flex flex-col gap-2 items-center justify-center p-2 cursor-pointer"
       >
-        <FaPlusCircle size={30} />
-        <span className="text-l">Add Class</span>
+        <FaPlusCircle color="rgb(113 113 122)" size={30} />
+        <span className="text-l text-zinc-500">Add Class</span>
       </div>
 
       {isModalOpen && (
