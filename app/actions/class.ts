@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function createClass(
-  formData: FormData,
+  formData: FormData
 ): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
@@ -37,15 +37,42 @@ export async function createClass(
 }
 
 export async function deleteClass(
-  classId: string,
+  classId: string
 ): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
-  const { error } = await supabase.from("Classes").delete().eq("id", classId);
+  // First, list all files in the class folder
+  const { data: files, error: listError } = await supabase.storage
+    .from("class-files")
+    .list(`${classId}/`);
 
-  if (error) {
-    console.error("Error deleting class:", error);
-    throw error;
+  if (listError) {
+    console.error("Error listing files:", listError);
+    throw listError;
+  }
+
+  // Delete all files if there are any
+  if (files && files.length > 0) {
+    const filePaths = files.map((file) => `${classId}/${file.name}`);
+    const { error: deleteFilesError } = await supabase.storage
+      .from("class-files")
+      .remove(filePaths);
+
+    if (deleteFilesError) {
+      console.error("Error deleting files:", deleteFilesError);
+      throw deleteFilesError;
+    }
+  }
+
+  // Finally, delete the class itself
+  const { error: deleteClassError } = await supabase
+    .from("Classes")
+    .delete()
+    .eq("id", classId);
+
+  if (deleteClassError) {
+    console.error("Error deleting class:", deleteClassError.message);
+    throw deleteClassError;
   }
 
   revalidatePath("/protected");
