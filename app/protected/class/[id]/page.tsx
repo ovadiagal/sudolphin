@@ -35,7 +35,7 @@ export default async function ClassPage({
         </div>
 
         <div className="w-1/2 bg-card rounded-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Right Pane</h2>
+          <h2 className="text-2xl font-semibold mb-4">Generated Tests</h2>
           {/* Content for right pane */}
         </div>
       </div>
