@@ -16,7 +16,12 @@ interface FilePreviewModalProps {
   onDelete: () => void;
 }
 
-export function FilePreviewModal({ file, classId, onClose, onDelete }: FilePreviewModalProps) {
+export function FilePreviewModal({
+  file,
+  classId,
+  onClose,
+  onDelete,
+}: FilePreviewModalProps) {
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
