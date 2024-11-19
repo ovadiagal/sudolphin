@@ -1,6 +1,7 @@
 "use client";
 
 import { IoCloseSharp } from "react-icons/io5";
+import Image from "next/image";
 
 interface FilePreviewModalProps {
   file: {
@@ -33,14 +34,14 @@ export function FilePreviewModal({ file, onClose }: FilePreviewModalProps) {
           </button>
         </div>
         <div className="flex-1 p-4 overflow-auto">
-          {file.name.toLowerCase().endsWith('.pdf') ? (
+          {file.name.toLowerCase().endsWith(".pdf") ? (
             <iframe
               src={file.url}
               className="w-full h-full"
               title={file.name}
             />
           ) : file.name.match(/\.(jpg|jpeg|png|gif)$/i) ? (
-            <img
+            <Image
               src={file.url}
               alt={file.name}
               className="max-w-full max-h-full object-contain mx-auto"
@@ -60,4 +61,4 @@ export function FilePreviewModal({ file, onClose }: FilePreviewModalProps) {
       </div>
     </div>
   );
-} 
+}
