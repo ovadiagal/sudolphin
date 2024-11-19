@@ -1,3 +1,5 @@
+import ClassTiles from "@/components/class-tiles";
+import CreateClass from "@/components/create-class";
 import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
 import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
@@ -23,8 +25,17 @@ export default async function ProtectedPage() {
           user
         </div>
       </div>
+
+      <div className="bg-red-100">
+        <h3 className="font-bold text-lg">Your Classes</h3>
+        <div className="flex flex-wrap gap-4 p-4">
+          <ClassTiles />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2 items-start">
         <h2 className="font-bold text-2xl mb-4">Your user details</h2>
+
         <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
           {JSON.stringify(user, null, 2)}
         </pre>
