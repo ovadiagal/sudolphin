@@ -1,5 +1,3 @@
-"use server";
-
 import FileGallery from "@/components/file-gallery";
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
@@ -8,7 +6,7 @@ import { ClassHeader } from "@/components/class-header";
 export default async function ClassPage({
   params,
 }: {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
   const awaitedParams = await params;
   const { id } = awaitedParams;
