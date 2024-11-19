@@ -3,9 +3,10 @@
 import { createClient } from "@/utils/supabase/client";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FaFile, FaUpload } from "react-icons/fa";
+import { FaFile, FaUpload, FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
 import { FilePreviewModal } from "./file-preview-modal";
+import { deleteFile } from "@/app/actions/file";
 
 interface FileObject {
   name: string;
@@ -97,6 +98,18 @@ export default function FileGallery({ classId }: { classId: string }) {
     }
   };
 
+  const handleDelete = async (file: FileObject, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent opening the preview modal
+    try {
+      await deleteFile(classId, file.name);
+      toast.success("File deleted successfully");
+      fetchFiles(); // Refresh the file list
+    } catch (error) {
+      toast.error("Failed to delete file");
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center mb-4">
@@ -126,7 +139,7 @@ export default function FileGallery({ classId }: { classId: string }) {
         {files.map((file) => (
           <div
             key={file.name}
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent/50 cursor-pointer"
+            className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent/50 cursor-pointer group"
             onClick={() => handleFileClick(file)}
           >
             <FaFile className="text-muted-foreground" />
@@ -134,6 +147,13 @@ export default function FileGallery({ classId }: { classId: string }) {
             <span className="text-sm text-muted-foreground">
               {(file.metadata?.size / 1024 / 1024).toFixed(2)} MB
             </span>
+            <button
+              onClick={(e) => handleDelete(file, e)}
+              className="p-2 rounded-full hover:bg-red-100 text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+              title="Delete file"
+            >
+              <FaTrash size={14} />
+            </button>
           </div>
         ))}
         {files.length === 0 && (
@@ -147,7 +167,12 @@ export default function FileGallery({ classId }: { classId: string }) {
       {selectedFile && selectedFile.url && (
         <FilePreviewModal
           file={{ ...selectedFile, url: selectedFile.url }}
+          classId={classId}
           onClose={() => setSelectedFile(null)}
+          onDelete={() => {
+            fetchFiles();
+            setSelectedFile(null);
+          }}
         />
       )}
     </div>
