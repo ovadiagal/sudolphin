@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import CreateClass from "./create-class";
 import { DeleteClassButton } from "./delete-class-button";
+import Link from "next/link";
 
 export default async function ClassTiles() {
   const supabase = await createClient();
@@ -20,10 +21,15 @@ export default async function ClassTiles() {
       {classes?.map((classItem) => (
         <div
           key={classItem.id}
-          className="w-[calc(25%-12px)] h-40 text-white rounded-lg flex items-end p-2 cursor-pointer hover:opacity-95 relative group"
+          className="w-[calc(25%-12px)] h-32 text-white rounded-lg relative group"
           style={{ backgroundColor: classItem.color }}
         >
-          <span className="text-xl">{classItem.name}</span>
+          <Link
+            href={`/protected/class/${classItem.id}`}
+            className="absolute inset-0 p-2 flex items-end hover:opacity-95"
+          >
+            <span className="text-xl">{classItem.name}</span>
+          </Link>
           <DeleteClassButton classId={classItem.id} />
         </div>
       ))}

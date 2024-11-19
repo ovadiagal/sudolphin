@@ -22,15 +22,18 @@ const COLORS = [
 
 const CreateClass = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [selectedColor, setSelectedColor] = useState(COLORS[0]);
   const [isPending, startTransition] = useTransition();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
+    setTimeout(() => setIsAnimating(true), 0); // Trigger animation
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsAnimating(false);
+    setTimeout(() => setIsModalOpen(false), 200); // Match animation duration
   };
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -56,7 +59,7 @@ const CreateClass = () => {
     <>
       <div
         onClick={handleOpenModal}
-        className="w-[calc(25%-12px)] h-40 bg-zinc-700 text-white rounded-lg flex flex-col gap-2 items-center justify-center p-2 cursor-pointer"
+        className="w-[calc(25%-12px)] h-32 bg-zinc-700 text-white rounded-lg flex flex-col gap-2 items-center justify-center p-2 cursor-pointer"
       >
         <FaPlusCircle size={30} />
         <span className="text-l">Add Class</span>
@@ -64,10 +67,16 @@ const CreateClass = () => {
 
       {isModalOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-200 ${
+            isAnimating ? "opacity-100" : "opacity-0"
+          }`}
           onClick={handleBackdropClick}
         >
-          <div className="bg-white p-8 rounded-lg w-[25rem]">
+          <div
+            className={`bg-white p-8 rounded-lg w-[25rem] transform transition-transform duration-200 ${
+              isAnimating ? "scale-100" : "scale-95"
+            }`}
+          >
             <form
               className="flex-1 flex flex-col"
               action={handleSubmit}

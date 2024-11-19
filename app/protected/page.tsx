@@ -26,9 +26,9 @@ export default async function ProtectedPage() {
         </div>
       </div>
 
-      <div className="bg-red-100">
-        <h3 className="font-bold text-lg">Your Classes</h3>
-        <div className="flex flex-wrap gap-4 p-4">
+      <div>
+        <h3 className="font-bold text-lg mb-2">Your Classes</h3>
+        <div className="flex flex-wrap gap-4">
           <ClassTiles />
         </div>
       </div>
@@ -39,10 +39,6 @@ export default async function ProtectedPage() {
         <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
           {JSON.stringify(user, null, 2)}
         </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
       </div>
     </div>
   );
