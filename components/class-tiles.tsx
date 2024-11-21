@@ -6,9 +6,14 @@ import Link from "next/link";
 export default async function ClassTiles() {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data: classes, error } = await supabase
     .from("Classes")
     .select("*")
+    .eq("user_id", user?.id)
     .order("created_at", { ascending: false });
 
   if (error) {
