@@ -7,6 +7,7 @@ import { FaFile, FaUpload, FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
 import { FilePreviewModal } from "./file-preview-modal";
 import { deleteFile } from "@/app/actions/file";
+import axios from "axios";
 
 interface FileObject {
   name: string;
@@ -20,6 +21,7 @@ export default function FileGallery({ classId }: { classId: string }) {
   const [files, setFiles] = useState<FileObject[]>([]);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<FileObject | null>(null);
+  const [studyMaterial, setStudyMaterial] = useState<string | null>(null);
   const supabase = createClient();
 
   // Fetch files on component mount
@@ -110,6 +112,26 @@ export default function FileGallery({ classId }: { classId: string }) {
     }
   };
 
+  const handleGenerateStudyMaterial = async (file: FileObject) => {
+    if (!file.url) return;
+
+    try {
+      const response = await fetch(file.url);
+      const fileContent = await response.text();
+  
+      const res = await axios.post('/api/generate-study-material', { fileContent });
+  
+      if (res.status === 200) {
+        setStudyMaterial(res.data.studyMaterial);
+      } else {
+        toast.error('Failed to generate study material');
+      }
+    } catch (error) {
+      toast.error('Failed to generate study material');
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center mb-4">
@@ -154,6 +176,13 @@ export default function FileGallery({ classId }: { classId: string }) {
             >
               <FaTrash size={14} />
             </button>
+            <button
+              onClick={() => handleGenerateStudyMaterial(file)}
+              className="p-2 rounded-full hover:bg-blue-100 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"
+              title="Generate Study Material"
+            >
+              Generate
+            </button>
           </div>
         ))}
         {files.length === 0 && (
@@ -174,6 +203,18 @@ export default function FileGallery({ classId }: { classId: string }) {
             setSelectedFile(null);
           }}
         />
+      )}
+      {/* Study Material Modal */}
+      {studyMaterial && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setStudyMaterial(null)}>
+              &times;
+            </span>
+            <h2>Study Material</h2>
+            <p>{studyMaterial}</p>
+          </div>
+        </div>
       )}
     </div>
   );
