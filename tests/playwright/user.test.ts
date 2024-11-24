@@ -30,35 +30,69 @@ test.describe("Authentication Flow", () => {
   });
 });
 
-// test.describe("Dashboard Interactions", () => {
-//   test.beforeEach(async ({ page }) => {
-//     // Login before each test
-//     await page.goto("/sign-in");
-//     await page.fill('input[name="email"]', "user@example.com");
-//     await page.fill('input[name="password"]', "password");
-//     await page.click('button[type="submit"]');
-//   });
+test.describe.serial("Dashboard Interactions", () => {
+  test.beforeEach(async ({ page }) => {
+    // Login before each test
+    await page.goto("/sign-in");
+    await page.fill('input[name="email"]', "user@example.com");
+    await page.fill('input[name="password"]', "password");
+    await page.click('button[type="submit"]');
+    await Promise.all([
+      page.waitForURL('/protected'),  // Wait for redirect to protected route
+    ]);
+  });
 
-//   test("add new course", async ({ page }) => {
-//     await page.goto("/protected");
-//     await page.click('button:has-text("Add Class")');
-//     await page.fill('input[name="courseName"]', "Test 1");
-//     await page.click('button[type="submit"]');
-//     // Check that the course is visible on the dashboard
-//     await expect(page.getByText("Test Course One")).toBeVisible();
-//   });
+  test("add new course (default color)", async ({ page }) => {
+    await page.goto("/protected");
+    await page.locator('div').filter({ hasText: /^Add Class$/ }).nth(2).click();
 
-//   test("navigate to course detail page", async ({ page }) => {
-//     await page.goto("/protected");
-//     await page.click('div:has-text("Test Course One")');
-//     await expect(page).toHaveURL(/\/course\/\d+/);
-//     await expect(page.getByRole("heading")).toContainText("Test Course One");
-//   });
+    // Fill in class name
+    const newClassName = "Test Course One";
+    await page.fill('input[name="className"]', newClassName);
+    await page.getByRole("button", { name: "Create Class" }).click();
+    await expect(page.getByText(newClassName)).toBeVisible();
+  });
 
-//   // TODO: Add tests for:
-//   // - Course deletion
-//   // - Course color change
-//   // - Editing course details
-// });
+  test("add new course (selected color)", async ({ page }) => {
+    await page.goto("/protected");
+    await page.locator('div').filter({ hasText: /^Add Class$/ }).click();
+    await page.fill('input[name="className"]', "Test Course Two");
+    // Select a color for the course
+    // Bad practice to hardcode the color, but buttons don't have unique identifiers
+    await page.locator('button[style*="rgb(6, 182, 212)"]').click();
+    await page.getByRole("button", { name: "Create Class" }).click();
+    // Check that the course is visible on the dashboard
+    await expect(page.getByText("Test Course Two")).toBeVisible();
 
-// // TODO: Add tests for course material management.
+    // Find the course div by text content and verify its color
+    const courseDiv = await page.locator("div.rounded-lg", {
+      has: page.getByText("Test Course Two"),
+    });
+    // Get the background color from the style attribute
+    const backgroundColor = await courseDiv.getAttribute("style");
+    expect(backgroundColor).toContain("background-color: rgb(6, 182, 212);");
+  });
+
+  test("navigate to course detail page", async ({ page }) => {
+    await page.goto("/protected");
+    await page.getByRole('link', { name: 'Test Course One' }).click();
+    await expect(page).toHaveURL(/\/class\/\d+/);
+    await expect(page.getByRole('heading', { name: 'Test Course One' }).textContent()).resolves.toBe('Test Course One');
+  });
+
+  test("delete course from dashboard", async ({ page }) => {
+    await page.goto("/protected");
+    const courseText = "Test Course One";
+    await page.locator('div').filter({ hasText: /^Test Course One$/ }).getByRole('button').click();
+
+    await expect(page.getByText(courseText)).not.toBeVisible();
+  });
+
+  test("delete course from dashboard (two)", async ({ page }) => {
+    await page.goto("/protected");
+    const courseText = "Test Course Two";
+    await page.locator('div').filter({ hasText: /^Test Course Two$/ }).getByRole('button').click();
+
+    await expect(page.getByText(courseText)).not.toBeVisible();
+  });
+});
