@@ -18,6 +18,12 @@ interface TestAppProps {
 export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [parsedQuestions, setParsedQuestions] = useState<Question[]>([]);
+  const [score, setScore] = useState(0);
+  const [attemptedQuestions, setAttemptedQuestions] = useState(new Set());
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [testName, setTestName] = useState('');
+  const [showScore, setShowScore] = useState(false);
 
   useEffect(() => {
     if (tests && tests.length > 0) {
@@ -25,6 +31,7 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
 
       tests.forEach((test) => {
         const content = test.content;
+        setTestName(test.fileName);
 
         // Split the content by '---' to get individual questions
         const entries = content.split('---');
@@ -76,9 +83,26 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex < parsedQuestions.length - 1 ? prevIndex + 1 : 0
-    );
+    if (currentIndex < parsedQuestions.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setQuizCompleted(true);
+      setShowModal(true);
+    }
+  };
+
+  const handleRetake = () => {
+    setCurrentIndex(0);
+    setScore(0);
+    setAttemptedQuestions(new Set());
+    setQuizCompleted(false);
+    setShowModal(false);
+    setShowScore(false);
+  };
+
+  const handleDismiss = () => {
+    setShowModal(false);
+    setShowScore(true);
   };
 
   if (!parsedQuestions || parsedQuestions.length === 0) {
@@ -87,23 +111,56 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
 
   return (
     <div className="test-carousel">
-      <TestComponent question={parsedQuestions[currentIndex]} />
-      <div className="flex justify-between mt-4">
-        <button onClick={handlePrev} className="px-4 py-2 bg-gray-300 rounded">
-          Previous
-        </button>
-        <button onClick={handleNext} className="px-4 py-2 bg-gray-300 rounded">
-          Next
-        </button>
-      </div>
-      <div className="mt-2 text-center">
-        Question {currentIndex + 1} of {parsedQuestions.length}
-      </div>
+      {!showScore ? (
+        <>
+          <TestComponent 
+            question={parsedQuestions[currentIndex]} 
+            onCorrectAnswer={() => {
+              if (!attemptedQuestions.has(currentIndex)) {
+                setScore(score + 1);
+                setAttemptedQuestions(new Set(attemptedQuestions).add(currentIndex));
+              }
+            }}
+          />
+          <div className="flex justify-between mt-4">
+            <button onClick={handlePrev} className="px-4 py-2 bg-gray-300 rounded">
+              Previous
+            </button>
+            <button onClick={handleNext} className="px-4 py-2 bg-gray-300 rounded">
+              Next
+            </button>
+          </div>
+          <div className="mt-2 text-center">
+            Question {currentIndex + 1} of {parsedQuestions.length}
+          </div>
+          {showModal && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded shadow-lg">
+                <h1 className="text-2xl mb-4">Your Score: {score} / {parsedQuestions.length}</h1>
+                <button onClick={handleDismiss} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
+                  Dismiss
+                </button>
+                <button onClick={handleRetake} className="px-4 py-2 bg-green-500 text-white rounded">
+                  Retake Test
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="mt-4 text-left p-4 bg-white shadow-lg">
+          <h2>{testName}</h2>
+          <p>Your Score: {score} / {parsedQuestions.length}</p>
+          <button onClick={handleRetake} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+            Retake Test
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-const TestComponent: React.FC<{ question: Question }> = ({ question }) => {
+const TestComponent: React.FC<{ question: Question, onCorrectAnswer: () => void }> = ({ question, onCorrectAnswer }) => {
   const [selectedOptionLabel, setSelectedOptionLabel] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -116,6 +173,9 @@ const TestComponent: React.FC<{ question: Question }> = ({ question }) => {
   const handleOptionClick = (label: string) => {
     setSelectedOptionLabel(label);
     setShowAnswer(true);
+    if (label === question.correctAnswer) {
+      onCorrectAnswer();
+    }
   };
 
   return (
