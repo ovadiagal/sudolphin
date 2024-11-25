@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import CreateClass from "./create-class";
 import { DeleteClassButton } from "./delete-class-button";
 import Link from "next/link";
+import ColorClassButton from "./color-class-button";
 
 export default async function ClassTiles() {
   const supabase = await createClient();
@@ -36,6 +37,7 @@ export default async function ClassTiles() {
             <span className="text-xl">{classItem.name}</span>
           </Link>
           <DeleteClassButton classId={classItem.id} />
+          <ColorClassButton classId={classItem.id} initialColor={classItem.color}/>
         </div>
       ))}
       <CreateClass />
