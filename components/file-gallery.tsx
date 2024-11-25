@@ -7,7 +7,11 @@ import { FaFile, FaUpload, FaTrash, FaEllipsisV } from "react-icons/fa";
 import { toast } from "sonner";
 import { FilePreviewModal } from "./file-preview-modal";
 import { deleteFile } from "@/app/actions/file";
-import axios from "axios";
+
+// Import the utility functions
+import { generateTest } from "./generate-tests";
+import { generateFlashCards } from "./generate-flash-cards";
+import { generateCribSheet } from "./generate-crib-sheet";
 
 interface FileObject {
   name: string;
@@ -28,14 +32,17 @@ export default function FileGallery({ classId }: { classId: string }) {
     { fileName: string; content: string }[]
   >([]);
 
-  // **Added state variables for crib sheets**
   const [generatedCribSheets, setGeneratedCribSheets] = useState<
     { fileName: string; content: string }[]
   >([]);
-  const [selectedCribSheetIndex, setSelectedCribSheetIndex] = useState<number | null>(null);
+  const [selectedCribSheetIndex, setSelectedCribSheetIndex] = useState<number | null>(
+    null
+  );
 
   const [selectedTestIndex, setSelectedTestIndex] = useState<number | null>(null);
-  const [selectedFlashCardIndex, setSelectedFlashCardIndex] = useState<number | null>(null);
+  const [selectedFlashCardIndex, setSelectedFlashCardIndex] = useState<number | null>(
+    null
+  );
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const supabase = createClient();
 
@@ -63,7 +70,7 @@ export default function FileGallery({ classId }: { classId: string }) {
           ...file,
           url: publicUrl,
         };
-      }),
+      })
     );
 
     // Filter out unnecessary properties and ensure 'metadata' has 'size'
@@ -101,7 +108,7 @@ export default function FileGallery({ classId }: { classId: string }) {
       fetchFiles(); // Refresh file list
       setUploading(false);
     },
-    [classId, supabase.storage],
+    [classId, supabase.storage]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -129,7 +136,7 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const handleGenerateClick = async (
     file: FileObject,
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.stopPropagation(); // Prevent file click
     toast.info("Generating study material...", {
@@ -137,13 +144,18 @@ export default function FileGallery({ classId }: { classId: string }) {
       duration: Infinity,
       closeButton: false,
     });
-    await handleGenerateStudyMaterial(file);
+    if (file.url) {
+      const generatedTest = await generateTest(file.url, file.name);
+      if (generatedTest) {
+        setGeneratedTests((prevTests) => [...prevTests, generatedTest]);
+      }
+    }
     toast.dismiss();
   };
 
   const handleGenerateFlashCardsClick = async (
     file: FileObject,
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.stopPropagation(); // Prevent file click
     toast.info("Generating flash cards...", {
@@ -151,14 +163,18 @@ export default function FileGallery({ classId }: { classId: string }) {
       duration: Infinity,
       closeButton: false,
     });
-    await handleGenerateFlashCards(file);
+    if (file.url) {
+      const generatedFlashCard = await generateFlashCards(file.url, file.name);
+      if (generatedFlashCard) {
+        setGeneratedFlashCards((prevFlashCards) => [...prevFlashCards, generatedFlashCard]);
+      }
+    }
     toast.dismiss();
   };
 
-  // **Handler for generating crib sheets**
   const handleGenerateCribSheetClick = async (
     file: FileObject,
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.stopPropagation(); // Prevent file click
     toast.info("Generating crib sheet...", {
@@ -166,113 +182,14 @@ export default function FileGallery({ classId }: { classId: string }) {
       duration: Infinity,
       closeButton: false,
     });
-    await handleGenerateCribSheet(file);
+    if (file.url) {
+      const generatedCribSheet = await generateCribSheet(file.url, file.name);
+      if (generatedCribSheet) {
+        setGeneratedCribSheets((prevCribSheets) => [...prevCribSheets, generatedCribSheet]);
+      }
+    }
     toast.dismiss();
   };
-
-  const handleGenerateStudyMaterial = async (file: FileObject) => {
-    if (!file.url) return;
-
-    try {
-      const response = await fetch(file.url);
-      const arrayBuffer = await response.arrayBuffer();
-
-      const base64FileContent = arrayBufferToBase64(arrayBuffer);
-
-      const requestBodySize = (base64FileContent.length * 3) / 4; // Approximate size in bytes
-      console.log("Request body size:", requestBodySize / (1024 * 1024), "MB");
-
-      const res = await axios.post("/api/generate-study-material", {
-        fileContent: base64FileContent,
-      });
-
-      if (res.status === 200) {
-        setGeneratedTests((prevTests) => [
-          ...prevTests,
-          { fileName: file.name, content: res.data.studyMaterial },
-        ]);
-        toast.success("Study material generated successfully");
-      } else {
-        toast.error("Failed to generate study material");
-      }
-    } catch (error) {
-      toast.error("Failed to generate study material");
-      console.error(error);
-    }
-  };
-
-  const handleGenerateFlashCards = async (file: FileObject) => {
-    if (!file.url) return;
-
-    try {
-      const response = await fetch(file.url);
-      const arrayBuffer = await response.arrayBuffer();
-
-      const base64FileContent = arrayBufferToBase64(arrayBuffer);
-
-      const requestBodySize = (base64FileContent.length * 3) / 4; // Approximate size in bytes
-      console.log("Request body size:", requestBodySize / (1024 * 1024), "MB");
-
-      const res = await axios.post("/api/generate-flash-cards", {
-        fileContent: base64FileContent,
-      });
-
-      if (res.status === 200) {
-        setGeneratedFlashCards((prevFlashCards) => [
-          ...prevFlashCards,
-          { fileName: file.name, content: res.data.flashCards },
-        ]);
-        toast.success("Flash cards generated successfully");
-      } else {
-        toast.error("Failed to generate flash cards");
-      }
-    } catch (error) {
-      toast.error("Failed to generate flash cards");
-      console.error(error);
-    }
-  };
-
-  // **Function to handle crib sheet generation**
-  const handleGenerateCribSheet = async (file: FileObject) => {
-    if (!file.url) return;
-
-    try {
-      const response = await fetch(file.url);
-      const arrayBuffer = await response.arrayBuffer();
-
-      const base64FileContent = arrayBufferToBase64(arrayBuffer);
-
-      const requestBodySize = (base64FileContent.length * 3) / 4; // Approximate size in bytes
-      console.log("Request body size:", requestBodySize / (1024 * 1024), "MB");
-
-      const res = await axios.post("/api/generate-crib-sheet", {
-        fileContent: base64FileContent,
-      });
-
-      if (res.status === 200) {
-        setGeneratedCribSheets((prevCribSheets) => [
-          ...prevCribSheets,
-          { fileName: file.name, content: res.data.cribSheet },
-        ]);
-        toast.success("Crib sheet generated successfully");
-      } else {
-        toast.error("Failed to generate crib sheet");
-      }
-    } catch (error) {
-      toast.error("Failed to generate crib sheet");
-      console.error(error);
-    }
-  };
-
-  function arrayBufferToBase64(buffer: ArrayBuffer) {
-    let binary = "";
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  }
 
   return (
     <div className="flex gap-4">
@@ -286,12 +203,12 @@ export default function FileGallery({ classId }: { classId: string }) {
         <div
           {...getRootProps()}
           className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
-              ${
-                isDragActive
-                  ? "border-primary bg-primary/10"
-                  : "border-gray-300 hover:border-primary"
-              }
-              ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                ${
+                  isDragActive
+                    ? "border-primary bg-primary/10"
+                    : "border-gray-300 hover:border-primary"
+                }
+                ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <input {...getInputProps()} />
           <FaUpload className="mx-auto mb-2 text-2xl" />
@@ -341,7 +258,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                       onClick={(e) => handleGenerateClick(file, e)}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Generate Study Material
+                      Generate Practice Tests
                     </button>
                     <button
                       onClick={(e) => handleGenerateFlashCardsClick(file, e)}
@@ -349,7 +266,6 @@ export default function FileGallery({ classId }: { classId: string }) {
                     >
                       Generate Flash Cards
                     </button>
-                    {/* **Added option to generate crib sheets** */}
                     <button
                       onClick={(e) => handleGenerateCribSheetClick(file, e)}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -427,9 +343,7 @@ export default function FileGallery({ classId }: { classId: string }) {
             )}
           </div>
         ) : (
-          <p className="text-muted-foreground text-sm py-4">
-            No tests generated yet
-          </p>
+          <p className="text-muted-foreground text-sm py-4">No tests generated yet</p>
         )}
 
         {/* Generated Flash Cards */}
@@ -480,7 +394,7 @@ export default function FileGallery({ classId }: { classId: string }) {
           </p>
         )}
 
-        {/* **Generated Crib Sheets** */}
+        {/* Generated Crib Sheets */}
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-2xl font-semibold">Generated Crib Sheets</h3>
         </div>
