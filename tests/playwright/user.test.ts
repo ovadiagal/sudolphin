@@ -83,7 +83,8 @@ test.describe.serial("Dashboard Interactions", () => {
   test("delete course from dashboard", async ({ page }) => {
     await page.goto("/protected");
     const courseText = "Test Course One";
-    await page.locator('div').filter({ hasText: /^Test Course One$/ }).getByRole('button').click();
+    // await page.locator('div').filter({ hasText: /^Test Course One$/ }).getByRole('button').click();
+    await page.getByRole('button').nth(3).click();
 
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
@@ -91,26 +92,13 @@ test.describe.serial("Dashboard Interactions", () => {
   test("delete course from dashboard (two)", async ({ page }) => {
     await page.goto("/protected");
     const courseText = "Test Course Two";
-    await page.locator('div').filter({ hasText: /^Test Course Two$/ }).getByRole('button').click();
+    // await page.locator('div').filter({ hasText: /^Test Course Two$/ }).getByRole('button').click();
+    await page.getByRole('button').nth(1).click();
 
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
 
-});
-
-test.describe.serial("File Upload", () => {
-  test.beforeEach(async ({ page }) => {
-    // Login before each test
-    await page.goto("/sign-in");
-    await page.fill('input[name="email"]', "user@example.com");
-    await page.fill('input[name="password"]', "password");
-    await page.click('button[type="submit"]');
-    await Promise.all([
-      page.waitForURL("/protected"), // Wait for redirect to protected route
-    ]);
-  });
-
-  test("add new course (default color)", async ({ page }) => {
+  test("add new course for files (default color)", async ({ page }) => {
     await page.goto("/protected");
     await page.locator('div').filter({ hasText: /^Add Class$/ }).nth(2).click();
 
@@ -149,14 +137,10 @@ test.describe.serial("File Upload", () => {
     await expect(page.getByText("Upload Complete!")).toBeVisible();
   });
 
-  test("delete course from dashboard (two)", async ({ page }) => {
+  test("delete file upload course from dashboard", async ({ page }) => {
     await page.goto("/protected");
     const courseText = "File Upload Test Course";
-    await page
-      .locator("div")
-      .filter({ hasText: /^File Upload Test Course$/ })
-      .getByRole("button")
-      .click();
+    await page.getByRole('button').nth(1).click();
 
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
