@@ -21,7 +21,6 @@ export default function FileGallery({ classId }: { classId: string }) {
   const [files, setFiles] = useState<FileObject[]>([]);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<FileObject | null>(null);
-  const [loading, setLoading] = useState(false);
   const [generatedTests, setGeneratedTests] = useState<
     { fileName: string; content: string }[]
   >([]);
@@ -133,14 +132,12 @@ export default function FileGallery({ classId }: { classId: string }) {
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
     e.stopPropagation(); // Prevent file click
-    setLoading(true);
     toast.info("Generating study material...", {
       position: "bottom-center",
       duration: Infinity,
       closeButton: false,
     });
     await handleGenerateStudyMaterial(file);
-    setLoading(false);
     toast.dismiss();
   };
 
@@ -149,14 +146,12 @@ export default function FileGallery({ classId }: { classId: string }) {
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
     e.stopPropagation(); // Prevent file click
-    setLoading(true);
     toast.info("Generating flash cards...", {
       position: "bottom-center",
       duration: Infinity,
       closeButton: false,
     });
     await handleGenerateFlashCards(file);
-    setLoading(false);
     toast.dismiss();
   };
 
@@ -166,14 +161,12 @@ export default function FileGallery({ classId }: { classId: string }) {
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
     e.stopPropagation(); // Prevent file click
-    setLoading(true);
     toast.info("Generating crib sheet...", {
       position: "bottom-center",
       duration: Infinity,
       closeButton: false,
     });
     await handleGenerateCribSheet(file);
-    setLoading(false);
     toast.dismiss();
   };
 
