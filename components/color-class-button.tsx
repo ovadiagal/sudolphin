@@ -59,15 +59,18 @@ const ColorClassButton = ({
 
       {/* Color selection panel */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-[200px] p-4 bg-zinc-200 border rounded shadow-lg z-10">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-sm font-medium text-zinc-500">Select a New Color</h3>
+        <div className="absolute top-full left-0 mt-2 w-[200px] p-4 bg-white border rounded shadow-lg z-10">
+          <div className="flex justify-between items-center mb-4">
+            {/* "Select a New Color" styled to match "Create a New Class" */}
+            <h3 className="text-base font-medium text-black">
+              Select New Color
+            </h3>
             <button
               type="button"
               onClick={handleClosePanel}
               className="p-1 rounded hover:bg-gray-300"
             >
-              <IoCloseSharp size={18} className="text-zinc-500"/>
+              <IoCloseSharp size={24} className="text-black" />
             </button>
           </div>
 
@@ -91,9 +94,11 @@ const ColorClassButton = ({
           <button
             onClick={handleSubmit}
             disabled={isPending}
-            className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:bg-blue-300"
+            className={`w-full py-2 rounded text-white bg-black hover:bg-zinc-800 disabled:bg-black/50 ${
+              isPending ? "cursor-wait" : ""
+            }`}
           >
-            {isPending ? "Updating..." : "Update Color"}
+            {isPending ? "Updating..." : "Update"}
           </button>
         </div>
       )}
