@@ -121,8 +121,14 @@ export default function FileGallery({ classId }: { classId: string }) {
   const handleGenerateClick = async (file: FileObject, e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
     e.stopPropagation(); // Prevent file click
     setLoading(true);
+    toast.info('Generating study material...', {
+      position: 'bottom-center',
+      duration: Infinity,
+      closeButton: false
+    });
     await handleGenerateStudyMaterial(file);
     setLoading(false);
+    toast.dismiss()
   };
 
   const handleGenerateStudyMaterial = async (file: FileObject) => {
@@ -223,7 +229,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                 title="Generate Study Material"
                 disabled={loading}
               >
-                {loading ? 'Loading...' : 'Generate'}
+                Generate
             </button>
             </div>
           ))}
