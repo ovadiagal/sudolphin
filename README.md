@@ -71,3 +71,7 @@ To run black-box unit tests run the npm script:
 or
 
 `npm run test:coverage` to generate a coverage report.
+
+
+- Work Done By: Gal Ovadia, Rana Myneni, Matthew Perry, Cas Copeland, Jacob Kotzian, Maeci Frank
+
