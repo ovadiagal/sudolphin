@@ -28,14 +28,10 @@ export default async function ClassPage({
       <ClassHeader name={classData.name} color={classData.color} />
 
       <div className="flex gap-6">
-        <div className="w-1/2 bg-card rounded-lg p-6">
+        <div className="w-full bg-card rounded-lg p-6">
           <FileGallery classId={id} />
         </div>
 
-        <div className="w-1/2 bg-card rounded-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Generated Tests</h2>
-          {/* Content for right pane */}
-        </div>
       </div>
     </div>
   );
