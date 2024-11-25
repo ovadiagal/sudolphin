@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
+interface Option {
+  label: string;
+  text: string;
+}
+
 interface Question {
   question: string;
-  options: string[];
-  correctAnswer: string;
+  options: Option[];
+  correctAnswer: string; // The label of the correct answer, e.g., 'A', 'B', 'C', 'D'
 }
 
 interface TestAppProps {
@@ -27,18 +32,35 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
         entries.forEach((entry) => {
           const trimmedEntry = entry.trim();
           if (trimmedEntry) {
-            // Extract question and options using regular expressions
+            // Extract question
             const questionMatch = trimmedEntry.match(/^\d+\.\s*(.+)$/m);
-            const optionsMatch = trimmedEntry.match(/^[A-D]\)\s*.+$/gm);
-            const correctAnswerMatch = trimmedEntry.match(/Correct answer:\s*(.+)$/m);
+            if (!questionMatch) return;
 
-            if (questionMatch && optionsMatch && correctAnswerMatch) {
-              const question = questionMatch[1].trim();
-              const options = optionsMatch.map((option) => option.trim());
-              const correctAnswer = correctAnswerMatch[1].trim();
+            const questionText = questionMatch[1].trim();
 
-              allQuestions.push({ question, options, correctAnswer });
+            // Extract options using RegExp.exec()
+            const optionsRegex = /^([A-D])\)\s*(.+)$/gm;
+            let optionMatch: RegExpExecArray | null;
+            const options: Option[] = [];
+
+            while ((optionMatch = optionsRegex.exec(trimmedEntry)) !== null) {
+              options.push({
+                label: optionMatch[1], // 'A', 'B', 'C', or 'D'
+                text: optionMatch[2].trim(),
+              });
             }
+
+            // Extract correct answer
+            const correctAnswerMatch = trimmedEntry.match(/Correct answer:\s*([A-D])/m);
+            if (!correctAnswerMatch) return;
+
+            const correctAnswerLabel = correctAnswerMatch[1];
+
+            allQuestions.push({
+              question: questionText,
+              options,
+              correctAnswer: correctAnswerLabel,
+            });
           }
         });
       });
@@ -82,17 +104,17 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
 };
 
 const TestComponent: React.FC<{ question: Question }> = ({ question }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOptionLabel, setSelectedOptionLabel] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
 
   // Reset state when question changes
   useEffect(() => {
-    setSelectedOption(null);
+    setSelectedOptionLabel(null);
     setShowAnswer(false);
   }, [question]);
 
-  const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
+  const handleOptionClick = (label: string) => {
+    setSelectedOptionLabel(label);
     setShowAnswer(true);
   };
 
@@ -100,25 +122,25 @@ const TestComponent: React.FC<{ question: Question }> = ({ question }) => {
     <div className="test-question border border-gray-300 p-4 m-2 rounded-lg shadow-md bg-white">
       <div className="text-lg font-medium mb-4">{question.question}</div>
       <div className="options space-y-2">
-        {question.options.map((option, index) => (
+        {question.options.map((option) => (
           <button
-            key={index}
-            onClick={() => handleOptionClick(option)}
+            key={option.label}
+            onClick={() => handleOptionClick(option.label)}
             className={`block w-full text-left px-4 py-2 border rounded ${
-              showAnswer && option === question.correctAnswer
+              showAnswer && option.label === question.correctAnswer
                 ? 'bg-green-100'
-                : showAnswer && option === selectedOption
+                : showAnswer && option.label === selectedOptionLabel
                 ? 'bg-red-100'
                 : 'bg-white'
             }`}
           >
-            {option}
+            {option.label}) {option.text}
           </button>
         ))}
       </div>
       {showAnswer && (
         <div className="mt-4">
-          {selectedOption === question.correctAnswer ? (
+          {selectedOptionLabel === question.correctAnswer ? (
             <p className="text-green-600">Correct!</p>
           ) : (
             <p className="text-red-600">
