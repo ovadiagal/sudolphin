@@ -14,6 +14,8 @@
 
 ### Pre-Requesties/Dependenices:
 
+Operating System: Windows, macOS, or Linux
+
 To run the project locally install:
 - [Node.JS and npm](https://nodejs.org/en/download/package-manager)
 
@@ -26,6 +28,8 @@ The project requires the following npm packages:
 - Playwright
 
 These will be installed automatically.
+
+A modern web browser (e.g., Google Chrome, Mozilla Firefox) required to run local host.
 
 ### Setup Steps
 
@@ -71,6 +75,20 @@ To run black-box unit tests run the npm script:
 or
 
 `npm run test:coverage` to generate a coverage report.
+
+## Troubleshoot
+
+- Error: Supabase authentication failed.
+- Solution: Verify that the NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY values in .env are correct.
+
+- Error: OPENAI_API_KEY is missing.
+- Solution: Ensure your OpenAI API Key is correctly set in the .env file.
+
+- Error: Cannot connect to localhost:3000.
+- Solution: Confirm Node.js is installed and that the development server is running.
+
+- Error: Tests fail unexpectedly.
+- Solution: Ensure all dependencies are installed by running npm ci again.
 
 
 - Work Done By: Gal Ovadia, Rana Myneni, Matthew Perry, Cas Copeland, Jacob Kotzian, Maeci Frank

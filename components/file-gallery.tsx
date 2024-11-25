@@ -7,6 +7,8 @@ import { FaFile, FaUpload, FaTrash, FaEllipsisV } from "react-icons/fa";
 import { toast } from "sonner";
 import { FilePreviewModal } from "./file-preview-modal";
 import { deleteFile } from "@/app/actions/file";
+import { FlashcardApp, Flashcard } from "./interactive-flashcards";
+import { TestApp } from "./interactive-tests";
 
 // Import the utility functions
 import { generateTest } from "./generate-tests";
@@ -44,6 +46,9 @@ export default function FileGallery({ classId }: { classId: string }) {
     null
   );
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+  const [parsedFlashcards, setParsedFlashcards] = useState<Flashcard[]>([]);
+  const [parsedTests, setParsedTests] = useState<{ fileName: string; content: string }[]>([]);
+
   const supabase = createClient();
 
   // Fetch files on component mount
@@ -191,7 +196,46 @@ export default function FileGallery({ classId }: { classId: string }) {
     toast.dismiss();
   };
 
+  useEffect(() => {
+    if (generatedFlashCards && generatedFlashCards.length > 0) {
+      const allFlashcards: Flashcard[] = [];
+
+      generatedFlashCards.forEach((file) => {
+        const content = file.content;
+      
+        // Split the content by '---' to get individual flashcards
+        const entries = content.split('---');
+      
+        entries.forEach((entry) => {
+          const trimmedEntry = entry.trim();
+          if (trimmedEntry) {
+            // Extract question and answer using regular expressions
+            const questionMatch = trimmedEntry.match(/Q:\s*(.+)/);
+            const answerMatch = trimmedEntry.match(/A:\s*(.+)/);
+      
+            if (questionMatch && answerMatch) {
+              const question = questionMatch[1].trim();
+              const answer = answerMatch[1].trim();
+      
+              allFlashcards.push({ question, answer });
+            }
+          }
+        });
+      });
+      
+      setParsedFlashcards(allFlashcards);
+    }
+  }, [generatedFlashCards]);
+
+  useEffect(() => {
+    if (generatedTests && generatedTests.length > 0) {
+      console.log(generatedTests.length);
+      setParsedTests(generatedTests);
+    }
+  }, [generatedTests]);
+
   return (
+    <div className="flex flex-col">
     <div className="flex gap-4">
       {/* Left Side: File Upload and List */}
       <div className="w-1/2 flex flex-col gap-4">
@@ -441,6 +485,15 @@ export default function FileGallery({ classId }: { classId: string }) {
             No crib sheets generated yet
           </p>
         )}
+        </div>
+      </div>
+      <div className="flashcard-app mt-8">
+        <h2 className="text-xl font-bold mb-4">Interactive Flashcards</h2>
+        <FlashcardApp flashcards={parsedFlashcards}/>
+      </div>
+      <div className="test-app mt-8">
+        <h2 className="text-xl font-bold mb-4">Interactive Practice Quiz</h2>
+        <TestApp tests={parsedTests} />
       </div>
     </div>
   );
