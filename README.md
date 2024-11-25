@@ -14,6 +14,8 @@
 
 ### Pre-Requesties/Dependenices:
 
+Operating System: Windows, macOS, or Linux
+
 To run the project locally install:
 - [Node.JS and npm](https://nodejs.org/en/download/package-manager)
 
@@ -26,6 +28,8 @@ The project requires the following npm packages:
 - Playwright
 
 These will be installed automatically.
+
+A modern web browser (e.g., Google Chrome, Mozilla Firefox) required to run local host.
 
 ### Setup Steps
 
