@@ -59,10 +59,12 @@ const CreateClass = () => {
     <>
       <div
         onClick={handleOpenModal}
-        className="w-[calc(25%-12px)] h-32 bg-zinc-200 text-white rounded-lg flex flex-col gap-2 items-center justify-center p-2 cursor-pointer"
+        className="w-[calc(25%-12px)] h-32 bg-zinc-200 dark:bg-zinc-800 text-white rounded-lg flex flex-col gap-2 items-center justify-center p-2 cursor-pointer hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors"
       >
-        <FaPlusCircle color="rgb(113 113 122)" size={30} />
-        <span className="text-l text-zinc-500">Add Class</span>
+        <FaPlusCircle className="text-zinc-500 dark:text-zinc-400" size={30} />
+        <span className="text-l text-zinc-500 dark:text-zinc-400">
+          Add Class
+        </span>
       </div>
 
       {isModalOpen && (
@@ -73,7 +75,7 @@ const CreateClass = () => {
           onClick={handleBackdropClick}
         >
           <div
-            className={`bg-white p-8 rounded-lg w-[25rem] transform transition-transform duration-200 ${
+            className={`bg-white dark:bg-zinc-900 p-8 rounded-lg w-[25rem] transform transition-transform duration-200 ${
               isAnimating ? "scale-100" : "scale-95"
             }`}
           >
@@ -83,25 +85,35 @@ const CreateClass = () => {
               autoComplete="off"
             >
               <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-medium">Create a new class</h1>
+                <h1 className="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                  Create a new class
+                </h1>
                 <button type="button" disabled={isPending}>
                   <IoCloseSharp
                     size={32}
                     onClick={handleCloseModal}
-                    className="rounded hover:bg-gray-300 p-1"
+                    className="rounded hover:bg-gray-300 dark:hover:bg-gray-700 p-1 text-gray-700 dark:text-gray-300 transition-colors"
                   />
                 </button>
               </div>
               <div className="flex flex-col gap-2 [&>input]:mb-3">
-                <Label htmlFor="className">Class Name</Label>
+                <Label
+                  htmlFor="className"
+                  className="text-gray-900 dark:text-gray-100"
+                >
+                  Class Name
+                </Label>
                 <Input
                   name="className"
                   placeholder="CS1301"
                   required
                   autoComplete="off"
+                  className="dark:bg-zinc-800 dark:text-gray-100 dark:border-gray-700"
                 />
 
-                <Label>Color</Label>
+                <Label className="text-gray-900 dark:text-gray-100">
+                  Color
+                </Label>
                 <div className="flex gap-3 flex-wrap justify-center py-2">
                   {COLORS.map((color) => (
                     <button
@@ -111,7 +123,7 @@ const CreateClass = () => {
                       onClick={() => setSelectedColor(color)}
                       className={`w-6 h-6 rounded-full transition-transform ${
                         selectedColor === color
-                          ? "scale-110 ring-2 ring-offset-2 ring-black"
+                          ? "scale-110 ring-2 ring-offset-2 ring-black dark:ring-white dark:ring-offset-zinc-900"
                           : ""
                       }`}
                       style={{ backgroundColor: color }}
@@ -122,7 +134,7 @@ const CreateClass = () => {
                 <input type="hidden" name="color" value={selectedColor} />
 
                 <SubmitButton
-                  className="mt-4"
+                  className="mt-4 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800"
                   pendingText="Creating..."
                   disabled={isPending}
                 >
