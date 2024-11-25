@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { FilePreviewModal } from "./file-preview-modal";
 import { deleteFile } from "@/app/actions/file";
 import { FlashcardApp, Flashcard } from "./interactive-flashcards";
+import { TestApp } from "./interactive-tests";
 
 // Import the utility functions
 import { generateTest } from "./generate-tests";
@@ -46,6 +47,8 @@ export default function FileGallery({ classId }: { classId: string }) {
   );
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const [parsedFlashcards, setParsedFlashcards] = useState<Flashcard[]>([]);
+  const [parsedTests, setParsedTests] = useState<{ fileName: string; content: string }[]>([]);
+
   const supabase = createClient();
 
   // Fetch files on component mount
@@ -199,36 +202,37 @@ export default function FileGallery({ classId }: { classId: string }) {
 
       generatedFlashCards.forEach((file) => {
         const content = file.content;
-
-        // Remove introductory text before the first '---'
-        const startIndex = content.indexOf('---');
-        if (startIndex !== -1) {
-          const flashcardsText = content.substring(startIndex);
-
-          // Split the content by '---' to get individual flashcards
-          const entries = flashcardsText.split('---');
-
-          entries.forEach((entry) => {
-            const trimmedEntry = entry.trim();
-            if (trimmedEntry) {
-              // Extract question and answer using regular expressions
-              const questionMatch = trimmedEntry.match(/\*\*Flashcard \d+\*\*\s*Q:\s*(.+)/);
-              const answerMatch = trimmedEntry.match(/A:\s*(.+)/);
-
-              if (questionMatch && answerMatch) {
-                const question = questionMatch[1].trim();
-                const answer = answerMatch[1].trim();
-
-                allFlashcards.push({ question, answer });
-              }
+      
+        // Split the content by '---' to get individual flashcards
+        const entries = content.split('---');
+      
+        entries.forEach((entry) => {
+          const trimmedEntry = entry.trim();
+          if (trimmedEntry) {
+            // Extract question and answer using regular expressions
+            const questionMatch = trimmedEntry.match(/Q:\s*(.+)/);
+            const answerMatch = trimmedEntry.match(/A:\s*(.+)/);
+      
+            if (questionMatch && answerMatch) {
+              const question = questionMatch[1].trim();
+              const answer = answerMatch[1].trim();
+      
+              allFlashcards.push({ question, answer });
             }
-          });
-        }
+          }
+        });
       });
-
+      
       setParsedFlashcards(allFlashcards);
     }
   }, [generatedFlashCards]);
+
+  useEffect(() => {
+    if (generatedTests && generatedTests.length > 0) {
+      console.log(generatedTests.length);
+      setParsedTests(generatedTests);
+    }
+  }, [generatedTests]);
 
   return (
     <div className="flex flex-col">
@@ -486,6 +490,10 @@ export default function FileGallery({ classId }: { classId: string }) {
       <div className="flashcard-app mt-8">
         <h2 className="text-xl font-bold mb-4">Interactive Flashcards</h2>
         <FlashcardApp flashcards={parsedFlashcards}/>
+      </div>
+      <div className="test-app mt-8">
+        <h2 className="text-xl font-bold mb-4">Interactive Practice Quiz</h2>
+        <TestApp tests={parsedTests} />
       </div>
     </div>
   );
