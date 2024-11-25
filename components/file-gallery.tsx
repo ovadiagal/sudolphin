@@ -13,7 +13,6 @@ import { FlashcardApp, Flashcard } from "./interactive-flashcards";
 import { generateTest } from "./generate-tests";
 import { generateFlashCards } from "./generate-flash-cards";
 import { generateCribSheet } from "./generate-crib-sheet";
-import { parse } from "path";
 
 interface FileObject {
   name: string;
