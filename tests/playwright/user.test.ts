@@ -95,4 +95,69 @@ test.describe.serial("Dashboard Interactions", () => {
 
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
+
+});
+
+test.describe.serial("File Upload", () => {
+  test.beforeEach(async ({ page }) => {
+    // Login before each test
+    await page.goto("/sign-in");
+    await page.fill('input[name="email"]', "user@example.com");
+    await page.fill('input[name="password"]', "password");
+    await page.click('button[type="submit"]');
+    await Promise.all([
+      page.waitForURL("/protected"), // Wait for redirect to protected route
+    ]);
+  });
+
+  test("add new course (default color)", async ({ page }) => {
+    await page.goto("/protected");
+    await page.locator('div').filter({ hasText: /^Add Class$/ }).nth(2).click();
+
+    // Fill in class name
+    const newClassName = "File Upload Test Course";
+    await page.fill('input[name="className"]', newClassName);
+    await page.getByRole("button", { name: "Create Class" }).click();
+    await expect(page.getByText(newClassName)).toBeVisible();
+  });
+
+  test("successful file upload", async ({ page }) => {
+    await page.goto("/protected");
+    await page.getByRole('link', { name: 'File Upload Test Course' }).click();
+
+    const fileChooserPromise = page.waitForEvent("filechooser");
+    await page.locator('div').filter({ hasText: /^Drag and drop files here, or click to select$/ }).click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles("./tests/playwright/shrek_textbasedPDF.pdf");
+
+    await expect(page.getByText("Upload Complete!")).toBeVisible();
+  });
+
+  test("file upload (multiple files)", async ({ page }) => {
+    await page.goto("/protected");
+    await page.getByRole('link', { name: 'File Upload Test Course' }).click();
+
+    const fileChooserPromise = page.waitForEvent("filechooser");
+    await page.locator('div').filter({ hasText: /^Drag and drop files here, or click to select$/ }).click();
+    const fileChooser = await fileChooserPromise;
+    const filesToUpload = [
+      './tests/playwright/shrek_textbasedPDF.pdf',
+      './tests/playwright/shrek2_textbasedPDF.pdf'
+    ];
+    await fileChooser.setFiles(filesToUpload);
+
+    await expect(page.getByText("Upload Complete!")).toBeVisible();
+  });
+
+  test("delete course from dashboard (two)", async ({ page }) => {
+    await page.goto("/protected");
+    const courseText = "File Upload Test Course";
+    await page
+      .locator("div")
+      .filter({ hasText: /^File Upload Test Course$/ })
+      .getByRole("button")
+      .click();
+
+    await expect(page.getByText(courseText)).not.toBeVisible();
+  });
 });
