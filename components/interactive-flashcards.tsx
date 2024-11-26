@@ -198,7 +198,7 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
   return (
     <div className="flashcard-carousel">
       <FlashcardComponent
-        flashcard={currentFlashcard} 
+        flashcard={currentFlashcard}
         onClick={onFlashcardClick} // No change here
         onStar={handleStar}
         isStarred={starredIndices.has(currentFlashcardIndex)}
@@ -219,6 +219,8 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
             fontSize: '1rem',
             cursor: 'pointer',
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
         >
           &larr; Previous
         </button>
@@ -229,6 +231,8 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
             fontSize: '1rem',
             cursor: 'pointer',
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
         >
           Next &rarr;
         </button>
