@@ -301,11 +301,11 @@ export default function FileGallery({ classId }: { classId: string }) {
     <div className="flex flex-col">
       {/* Display statistics */}
       <div className="mb-4 p-4 border rounded-lg shadow-md bg-white">
-        <h3 className="text-lg font-semibold mb-2">Statistics</h3>
-        <p className="text-gray-700 text-xl font-bold mb-1">
+        <h3 className="text-2xl font-semibold mb-2">Statistics:</h3>
+        <p className="text-gray-700 text-lg font-bold mb-1">
           Flashcards Mastered: <span className="text-green-500">{flashcardsClicked}</span>
         </p>
-        <p className="text-gray-700 text-xl font-bold">
+        <p className="text-gray-700 text-lg font-bold">
           Correct Practice Quiz Answers: <span className="text-green-500">{cumulativeScore}</span>
         </p>
       </div>
