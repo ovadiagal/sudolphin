@@ -419,6 +419,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                   e.stopPropagation();
                   if (item.id) {
                     handleDeleteGeneratedContent('cribsheet', item.id);
+                    console.log(index);
                   }
                 }}
               >
