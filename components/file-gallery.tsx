@@ -368,7 +368,7 @@ export default function FileGallery({ classId }: { classId: string }) {
             colorClass="text-blue-500"
             renderExtraButtons={(item, index) => (
               <button
-                className="text-red-500 hover:underline ml-2"
+                className="text-zinc-800 hover:underline ml-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (item.id) {
@@ -391,7 +391,7 @@ export default function FileGallery({ classId }: { classId: string }) {
             colorClass="text-green-500"
             renderExtraButtons={(item, index) => (
               <button
-                className="text-red-500 hover:underline ml-2"
+                className="text-zinc-800 hover:underline ml-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (item.id) {
@@ -414,7 +414,7 @@ export default function FileGallery({ classId }: { classId: string }) {
             colorClass="text-purple-500"
             renderExtraButtons={(item, index) => (
               <button
-                className="text-red-500 hover:underline ml-2"
+                className="text-zinc-800 hover:underline ml-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (item.id) {
