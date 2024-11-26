@@ -20,7 +20,6 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
   const [parsedQuestions, setParsedQuestions] = useState<Question[]>([]);
   const [score, setScore] = useState(0);
   const [attemptedQuestions, setAttemptedQuestions] = useState(new Set());
-  const [quizCompleted, setQuizCompleted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [testName, setTestName] = useState('');
   const [showScore, setShowScore] = useState(false);
@@ -86,7 +85,6 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
     if (currentIndex < parsedQuestions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setQuizCompleted(true);
       setShowModal(true);
     }
   };
@@ -95,7 +93,6 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
     setCurrentIndex(0);
     setScore(0);
     setAttemptedQuestions(new Set());
-    setQuizCompleted(false);
     setShowModal(false);
     setShowScore(false);
   };
