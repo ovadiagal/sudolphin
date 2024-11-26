@@ -23,7 +23,7 @@ const FlashcardComponent: React.FC<{
 
   const handleFlip = () => {
     setFlipped(!flipped);
-    onClick(); // Call the onClick prop when the flashcard is clicked
+    // onClick(); // Removed this line
   };
 
   return (
@@ -53,6 +53,7 @@ const FlashcardComponent: React.FC<{
           onClick={(e) => {
             e.stopPropagation(); // Prevent flip when clicking the star
             onStar();
+            onClick(); // Call the onClick prop when the star is clicked
           }}
           onMouseEnter={() => setIsIconHovered(true)}
           onMouseLeave={() => setIsIconHovered(false)}
@@ -198,7 +199,7 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
     <div className="flashcard-carousel">
       <FlashcardComponent
         flashcard={currentFlashcard} 
-        onClick={ onFlashcardClick }
+        onClick={onFlashcardClick} // No change here
         onStar={handleStar}
         isStarred={starredIndices.has(currentFlashcardIndex)}
       />
