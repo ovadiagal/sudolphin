@@ -75,3 +75,29 @@ or
 
 - Work Done By: Gal Ovadia, Rana Myneni, Matthew Perry, Cas Copeland, Jacob Kotzian, Maeci Frank
 
+### Release Notes
+
+#### v0.1.0
+
+Software features in this release:
+
+- Course Dashboard:
+  - Add classes to the dashboard to manage your courseload
+  - Drag-and-drop course materials (PDF, DOCX, PPTX, TXT) to manage resources
+- AI-Generated Study Resources:
+  - Flashcard Generation
+  - Practice Tests
+  - Crib Sheets
+- Progress Tracking:
+  - Track number of flashcards reviewed
+  - Track number of correct practice test questions answered
+
+Bug fixes in this release:
+
+- Fixed issue with flashcard rendering
+- Fixed issue with dark mode styling being unreadable
+- Fixed issue with not storing generated study resources
+
+Known bugs in this release:
+
+- Forgot password redirects to wrong page
