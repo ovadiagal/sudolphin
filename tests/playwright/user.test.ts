@@ -38,13 +38,17 @@ test.describe.serial("Dashboard Interactions", () => {
     await page.click('button[type="submit"]');
     await Promise.all([
       // Wait for redirect to protected route
-      page.waitForURL('/protected'),
+      page.waitForURL("/protected"),
     ]);
   });
 
   test("add new course (default color)", async ({ page }) => {
     await page.goto("/protected");
-    await page.locator('div').filter({ hasText: /^Add Class$/ }).nth(2).click();
+    await page
+      .locator("div")
+      .filter({ hasText: /^Add Class$/ })
+      .nth(2)
+      .click();
     // Fill in class name
     const newClassName = "Test Course One";
     await page.fill('input[name="className"]', newClassName);
@@ -54,7 +58,10 @@ test.describe.serial("Dashboard Interactions", () => {
 
   test("add new course (selected color)", async ({ page }) => {
     await page.goto("/protected");
-    await page.locator('div').filter({ hasText: /^Add Class$/ }).click();
+    await page
+      .locator("div")
+      .filter({ hasText: /^Add Class$/ })
+      .click();
     await page.fill('input[name="className"]', "Test Course Two");
     // Select a color for the course
     // Bad practice to hardcode the color, but buttons don't have unique identifiers
@@ -73,29 +80,35 @@ test.describe.serial("Dashboard Interactions", () => {
 
   test("navigate to course detail page", async ({ page }) => {
     await page.goto("/protected");
-    await page.getByRole('link', { name: 'Test Course One' }).click();
+    await page.getByRole("link", { name: "Test Course One" }).click();
     await expect(page).toHaveURL(/\/class\/\d+/);
-    await expect(page.getByRole('heading', { name: 'Test Course One' }).textContent()).resolves.toBe('Test Course One');
+    await expect(
+      page.getByRole("heading", { name: "Test Course One" }).textContent(),
+    ).resolves.toBe("Test Course One");
   });
 
   test("delete course from dashboard", async ({ page }) => {
     await page.goto("/protected");
     const courseText = "Test Course One";
-    await page.getByRole('button').nth(3).click();
+    await page.getByRole("button").nth(3).click();
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
 
   test("delete course from dashboard (two)", async ({ page }) => {
     await page.goto("/protected");
     const courseText = "Test Course Two";
-    await page.getByRole('button').nth(1).click();
+    await page.getByRole("button").nth(1).click();
 
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
 
   test("add new course for files (default color)", async ({ page }) => {
     await page.goto("/protected");
-    await page.locator('div').filter({ hasText: /^Add Class$/ }).nth(2).click();
+    await page
+      .locator("div")
+      .filter({ hasText: /^Add Class$/ })
+      .nth(2)
+      .click();
     // Fill in class name
     const newClassName = "File Upload Test Course";
     await page.fill('input[name="className"]', newClassName);
@@ -105,9 +118,12 @@ test.describe.serial("Dashboard Interactions", () => {
 
   test("successful file upload", async ({ page }) => {
     await page.goto("/protected");
-    await page.getByRole('link', { name: 'File Upload Test Course' }).click();
+    await page.getByRole("link", { name: "File Upload Test Course" }).click();
     const fileChooserPromise = page.waitForEvent("filechooser");
-    await page.locator('div').filter({ hasText: /^Drag and drop files here, or click to select$/ }).click();
+    await page
+      .locator("div")
+      .filter({ hasText: /^Drag and drop files here, or click to select$/ })
+      .click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles("./tests/playwright/shrek_textbasedPDF.pdf");
     await expect(page.getByText("Upload Complete!")).toBeVisible();
@@ -115,13 +131,16 @@ test.describe.serial("Dashboard Interactions", () => {
 
   test("file upload (multiple files)", async ({ page }) => {
     await page.goto("/protected");
-    await page.getByRole('link', { name: 'File Upload Test Course' }).click();
+    await page.getByRole("link", { name: "File Upload Test Course" }).click();
     const fileChooserPromise = page.waitForEvent("filechooser");
-    await page.locator('div').filter({ hasText: /^Drag and drop files here, or click to select$/ }).click();
+    await page
+      .locator("div")
+      .filter({ hasText: /^Drag and drop files here, or click to select$/ })
+      .click();
     const fileChooser = await fileChooserPromise;
     const filesToUpload = [
-      './tests/playwright/shrek_textbasedPDF.pdf',
-      './tests/playwright/shrek2_textbasedPDF.pdf'
+      "./tests/playwright/shrek_textbasedPDF.pdf",
+      "./tests/playwright/shrek2_textbasedPDF.pdf",
     ];
     await fileChooser.setFiles(filesToUpload);
     await expect(page.getByText("Upload Complete!")).toBeVisible();
@@ -130,7 +149,7 @@ test.describe.serial("Dashboard Interactions", () => {
   test("delete file upload course from dashboard", async ({ page }) => {
     await page.goto("/protected");
     const courseText = "File Upload Test Course";
-    await page.getByRole('button').nth(1).click();
+    await page.getByRole("button").nth(1).click();
     await expect(page.getByText(courseText)).not.toBeVisible();
   });
 });
