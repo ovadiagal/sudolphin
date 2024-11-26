@@ -25,6 +25,7 @@ export function GeneratedContent({
   colorClass,
   renderExtraButtons,
 }: GeneratedContentProps) {
+  //just slightly changing the functionality of the handleDownloadPDF and handleSharePDF functions to account for sharing as well
   const generatePDF = (item: GeneratedItem) => {
     const doc = new jsPDF({
       orientation: 'portrait',
