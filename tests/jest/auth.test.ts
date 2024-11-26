@@ -18,7 +18,7 @@ describe('Authentication Actions', () => {
     } as unknown as FormData;
   };
 
-  // Setup common mocks
+  // Setup Common Mocks
   const mockSupabase = {
     auth: {
       signUp: jest.fn(),
