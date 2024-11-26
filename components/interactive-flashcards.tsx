@@ -9,18 +9,21 @@ export interface Flashcard {
 
 interface FlashcardAppProps {
   flashcards: Flashcard[];
+  onFlashcardClick: () => void; // Add this prop to handle flashcard click event
 }
 
 const FlashcardComponent: React.FC<{
   flashcard: Flashcard;
   onStar: () => void;
   isStarred: boolean;
-}> = ({ flashcard, onStar, isStarred }) => {
+  onClick: () => void;
+}> = ({ flashcard, onStar, isStarred, onClick }) => {
   const [flipped, setFlipped] = useState(false);
   const [isIconHovered, setIsIconHovered] = useState(false);
 
   const handleFlip = () => {
     setFlipped(!flipped);
+    onClick(); // Call the onClick prop when the flashcard is clicked
   };
 
   return (
@@ -88,11 +91,12 @@ const FlashcardComponent: React.FC<{
   );
 };
 
-export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards }) => {
+export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashcardClick }) => {
   const [starredIndices, setStarredIndices] = useState<Set<number>>(new Set());
   const [unstarredIndices, setUnstarredIndices] = useState<number[]>([]);
   const [currentIndexUnstarred, setCurrentIndexUnstarred] = useState(0);
   const [showRetake, setShowRetake] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Initialize unstarredIndices when the component mounts or flashcards change
   useEffect(() => {
@@ -194,7 +198,8 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards }) => {
   return (
     <div className="flashcard-carousel">
       <FlashcardComponent
-        flashcard={currentFlashcard}
+        flashcard={currentFlashcard} 
+        onClick={ onFlashcardClick }
         onStar={handleStar}
         isStarred={starredIndices.has(currentFlashcardIndex)}
       />
