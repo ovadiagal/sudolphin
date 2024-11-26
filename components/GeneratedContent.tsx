@@ -1,5 +1,4 @@
 import React from 'react';
-import jsPDF from 'jspdf';
 import { FaDownload } from 'react-icons/fa';
 
 interface GeneratedItem {

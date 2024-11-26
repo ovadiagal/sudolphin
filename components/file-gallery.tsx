@@ -321,6 +321,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                   if (item.id) {
                     handleDeleteGeneratedContent('test', item.id);
                   }
+                  console.log(index);
                 }}
               >
                 <FaTrash size={14} />
@@ -342,6 +343,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                   e.stopPropagation();
                   if (item.id) {
                     handleDeleteGeneratedContent('flashcard', item.id);
+                    console.log(index);
                   }
                 }}
               >
@@ -364,6 +366,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                   e.stopPropagation();
                   if (item.id) {
                     handleDeleteGeneratedContent('cribsheet', item.id);
+                    console.log(index);
                   }
                 }}
               >
