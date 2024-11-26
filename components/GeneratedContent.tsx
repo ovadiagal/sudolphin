@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaDownload } from 'react-icons/fa';
+import { FaDownload, FaShareAlt } from 'react-icons/fa';
 import jsPDF from 'jspdf';
 
 interface GeneratedItem {
@@ -25,7 +25,7 @@ export function GeneratedContent({
   colorClass,
   renderExtraButtons,
 }: GeneratedContentProps) {
-  const handleDownloadPDF = (item: GeneratedItem) => {
+  const generatePDF = (item: GeneratedItem) => {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'pt',
@@ -60,7 +60,32 @@ export function GeneratedContent({
       cursorY += lineHeight;
     });
 
+    return doc;
+  };
+
+  const handleDownloadPDF = (item: GeneratedItem) => {
+    const doc = generatePDF(item);
     doc.save(`${item.fileName}-${title.replace(/\s+/g, '_')}.pdf`);
+  };
+
+  const handleSharePDF = async (item: GeneratedItem) => {
+    const doc = generatePDF(item);
+    const pdfBlob = doc.output('blob');
+
+    if (navigator.share) {
+      const file = new File([pdfBlob], `${item.fileName}.pdf`, { type: 'application/pdf' });
+      try {
+        await navigator.share({
+          files: [file],
+          title: item.fileName,
+          text: `Check out this PDF: ${item.fileName}`,
+        });
+      } catch (error) {
+        console.error('Error sharing PDF:', error);
+      }
+    } else {
+      alert('Sharing is not supported in your browser. You can download the file and share it manually.');
+    }
   };
 
   return (
@@ -79,6 +104,14 @@ export function GeneratedContent({
                   onClick={() => onItemSelect(index)}
                 >
                   {item.fileName} - {title} {index + 1}
+                </button>
+                {/* Share PDF Button */}
+                <button
+                  onClick={() => handleSharePDF(item)}
+                  className="ml-4 text-gray-900 hover:text-gray-700"
+                  title="Share PDF"
+                >
+                  <FaShareAlt size={16} />
                 </button>
                 {/* Download PDF Button */}
                 <button
