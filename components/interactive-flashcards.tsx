@@ -96,7 +96,6 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
   const [unstarredIndices, setUnstarredIndices] = useState<number[]>([]);
   const [currentIndexUnstarred, setCurrentIndexUnstarred] = useState(0);
   const [showRetake, setShowRetake] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Initialize unstarredIndices when the component mounts or flashcards change
   useEffect(() => {
