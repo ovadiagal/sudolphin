@@ -101,14 +101,7 @@ export function GeneratedContent({
                   {items[selectedIndex].fileName} - {title} {selectedIndex + 1}
                 </h4>
                 <div className="flex items-center">
-                  {/* Download PDF Button */}
-                  <button
-                    onClick={() => handleDownloadPDF(items[selectedIndex])}
-                    className="mr-2 text-blue-500 hover:text-blue-700"
-                    title="Download PDF"
-                  >
-                    <FaDownload size={20} />
-                  </button>
+
                   <button
                     className="text-gray-600 hover:text-gray-800"
                     onClick={() => onItemSelect(null)}

@@ -7,13 +7,15 @@ export interface Flashcard {
 
 interface FlashcardAppProps {
   flashcards: Flashcard[];
+  onFlashcardClick: () => void; // Add this prop to handle flashcard click event
 }
 
-const FlashcardComponent: React.FC<{ flashcard: Flashcard }> = ({ flashcard }) => {
+const FlashcardComponent: React.FC<{ flashcard: Flashcard; onClick: () => void }> = ({ flashcard, onClick }) => {
   const [flipped, setFlipped] = useState(false);
 
   const handleClick = () => {
     setFlipped(!flipped);
+    onClick(); // Call the onClick prop when the flashcard is clicked
   };
 
   return (
@@ -42,7 +44,7 @@ const FlashcardComponent: React.FC<{ flashcard: Flashcard }> = ({ flashcard }) =
   );
 };
 
-export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards }) => {
+export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashcardClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrev = () => {
@@ -59,7 +61,7 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards }) => {
 
   return (
     <div className="flashcard-carousel">
-      <FlashcardComponent flashcard={flashcards[currentIndex]} />
+      <FlashcardComponent flashcard={flashcards[currentIndex]} onClick={onFlashcardClick} />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
         <button
           onClick={handlePrev}
