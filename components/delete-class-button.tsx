@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { deleteClass } from "@/app/actions/class";
-import { FaTrash } from "react-icons/fa";
-import { toast } from "sonner";
+import { deleteClass } from '@/app/actions/class';
+import { FaTrash } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 export function DeleteClassButton({ classId }: { classId: string }) {
   const handleDelete = async () => {
     try {
       await deleteClass(classId);
-      toast.success("Class deleted successfully!");
+      toast.success('Class deleted successfully!');
     } catch (error) {
-      toast.error("Failed to delete class");
+      toast.error('Failed to delete class');
       console.error(error);
     }
   };

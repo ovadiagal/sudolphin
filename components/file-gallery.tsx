@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { toast } from "sonner";
-import { FilePreviewModal } from "./file-preview-modal";
-import { generateTest } from "./generate-tests";
-import { generateFlashCards } from "./generate-flash-cards";
-import { generateCribSheet } from "./generate-crib-sheet";
-import { FileUploadArea } from "./FileUploadArea";
-import { FileListItem } from "./FileListItem";
-import { GeneratedContent } from "./GeneratedContent";
-import { FlashcardApp, Flashcard } from "./interactive-flashcards";
-import { TestApp } from "./interactive-tests";
-import { FaTrash } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { toast } from 'sonner';
+import { FilePreviewModal } from './file-preview-modal';
+import { generateTest } from './generate-tests';
+import { generateFlashCards } from './generate-flash-cards';
+import { generateCribSheet } from './generate-crib-sheet';
+import { FileUploadArea } from './FileUploadArea';
+import { FileListItem } from './FileListItem';
+import { GeneratedContent } from './GeneratedContent';
+import { FlashcardApp, Flashcard } from './interactive-flashcards';
+import { TestApp } from './interactive-tests';
+import { FaTrash } from 'react-icons/fa';
 
 interface FileObject {
   name: string;
@@ -39,7 +39,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     GeneratedItem[]
   >([]);
   const [selectedTestIndex, setSelectedTestIndex] = useState<number | null>(
-    null,
+    null
   );
   const [selectedFlashCardIndex, setSelectedFlashCardIndex] = useState<
     number | null
@@ -56,30 +56,30 @@ export default function FileGallery({ classId }: { classId: string }) {
   // Fetch files
   const fetchFiles = async () => {
     const { data, error } = await supabase.storage
-      .from("class-files")
+      .from('class-files')
       .list(`${classId}/`);
 
     if (error) {
-      toast.error("Error loading files");
+      toast.error('Error loading files');
       return;
     }
 
     const filesWithUrls = await Promise.all(
-      (data || []).map(async (file) => {
+      (data || []).map(async file => {
         const {
           data: { publicUrl },
         } = supabase.storage
-          .from("class-files")
+          .from('class-files')
           .getPublicUrl(`${classId}/${file.name}`);
 
         return {
           ...file,
           url: publicUrl,
         };
-      }),
+      })
     );
 
-    const filteredFilesWithUrls = filesWithUrls.map((file) => ({
+    const filteredFilesWithUrls = filesWithUrls.map(file => ({
       ...file,
       metadata: { size: file.metadata.size },
     }));
@@ -87,64 +87,64 @@ export default function FileGallery({ classId }: { classId: string }) {
     setFiles(filteredFilesWithUrls);
   };
 
-  // Fetch generated content
+  // Fetch Generated Content
   const fetchGeneratedContent = async () => {
     const { data, error } = await supabase
-      .from("generated_content")
-      .select("*")
-      .eq("class_id", classId);
+      .from('generated_content')
+      .select('*')
+      .eq('class_id', classId);
 
     if (error) {
-      toast.error("Error loading generated content");
+      toast.error('Error loading generated content');
       return;
     }
 
-    const tests = data?.filter((item) => item.type === "test") || [];
-    const flashcards = data?.filter((item) => item.type === "flashcard") || [];
-    const cribsheets = data?.filter((item) => item.type === "cribsheet") || [];
+    const tests = data?.filter(item => item.type === 'test') || [];
+    const flashcards = data?.filter(item => item.type === 'flashcard') || [];
+    const cribsheets = data?.filter(item => item.type === 'cribsheet') || [];
 
     setGeneratedTests(
-      tests.map((item) => ({
+      tests.map(item => ({
         id: item.id,
         fileName: item.file_name,
         content: item.content,
-      })),
+      }))
     );
 
     setGeneratedFlashCards(
-      flashcards.map((item) => ({
+      flashcards.map(item => ({
         id: item.id,
         fileName: item.file_name,
         content: item.content,
-      })),
+      }))
     );
 
     setGeneratedCribSheets(
-      cribsheets.map((item) => ({
+      cribsheets.map(item => ({
         id: item.id,
         fileName: item.file_name,
         content: item.content,
-      })),
+      }))
     );
   };
 
-  // Fetch statistics from Supabase
+  // Fetch Statistics from Supabase
   const fetchStatistics = async () => {
     const { data, error } = await supabase
-      .from("user_statistics")
-      .select("flashcards_clicked, cumulative_score")
-      .eq("user_id", classId)
+      .from('user_statistics')
+      .select('flashcards_clicked, cumulative_score')
+      .eq('user_id', classId)
       .single();
 
     // PGRST116 is the code for "No rows found"
-    if (error && error.code !== "PGRST116") {
-      console.error("Error fetching statistics:", error);
-      toast.error("Error loading statistics");
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error fetching statistics:', error);
+      toast.error('Error loading statistics');
       return;
     }
 
     if (data) {
-      console.log("Fetched statistics:", data);
+      console.log('Fetched statistics:', data);
       setFlashcardsClicked(data.flashcards_clicked || 0);
       setCumulativeScore(data.cumulative_score || 0);
     } else {
@@ -168,7 +168,7 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const saveGeneratedContent = async (type: string, content: GeneratedItem) => {
     const { data, error } = await supabase
-      .from("generated_content")
+      .from('generated_content')
       .insert([
         {
           class_id: classId,
@@ -180,51 +180,45 @@ export default function FileGallery({ classId }: { classId: string }) {
       .select();
 
     if (error) {
-      toast.error("Error saving generated content");
+      toast.error('Error saving generated content');
     } else {
       const newItem = {
         id: data[0].id,
         fileName: content.fileName,
         content: content.content,
       };
-      if (type === "test") {
-        setGeneratedTests((prevTests) => [...prevTests, newItem]);
-      } else if (type === "flashcard") {
-        setGeneratedFlashCards((prevFlashCards) => [
-          ...prevFlashCards,
-          newItem,
-        ]);
-      } else if (type === "cribsheet") {
-        setGeneratedCribSheets((prevCribSheets) => [
-          ...prevCribSheets,
-          newItem,
-        ]);
+      if (type === 'test') {
+        setGeneratedTests(prevTests => [...prevTests, newItem]);
+      } else if (type === 'flashcard') {
+        setGeneratedFlashCards(prevFlashCards => [...prevFlashCards, newItem]);
+      } else if (type === 'cribsheet') {
+        setGeneratedCribSheets(prevCribSheets => [...prevCribSheets, newItem]);
       }
     }
   };
-
+  // Handle Generating Content
   const handleDeleteGeneratedContent = async (type: string, id: number) => {
     const { error } = await supabase
-      .from("generated_content")
+      .from('generated_content')
       .delete()
-      .eq("id", id);
+      .eq('id', id);
 
     if (error) {
-      toast.error("Error deleting generated content");
+      toast.error('Error deleting generated content');
     } else {
-      if (type === "test") {
-        setGeneratedTests((prevTests) =>
-          prevTests.filter((item) => item.id !== id),
+      if (type === 'test') {
+        setGeneratedTests(prevTests =>
+          prevTests.filter(item => item.id !== id)
         );
         setSelectedTestIndex(null);
-      } else if (type === "flashcard") {
-        setGeneratedFlashCards((prevFlashCards) =>
-          prevFlashCards.filter((item) => item.id !== id),
+      } else if (type === 'flashcard') {
+        setGeneratedFlashCards(prevFlashCards =>
+          prevFlashCards.filter(item => item.id !== id)
         );
         setSelectedFlashCardIndex(null);
-      } else if (type === "cribsheet") {
-        setGeneratedCribSheets((prevCribSheets) =>
-          prevCribSheets.filter((item) => item.id !== id),
+      } else if (type === 'cribsheet') {
+        setGeneratedCribSheets(prevCribSheets =>
+          prevCribSheets.filter(item => item.id !== id)
         );
         setSelectedCribSheetIndex(null);
       }
@@ -233,15 +227,15 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const handleGenerateTest = async (file: FileObject, e: React.MouseEvent) => {
     e.stopPropagation();
-    toast("Generating practice test...", {
-      position: "bottom-center",
+    toast('Generating practice test...', {
+      position: 'bottom-center',
       duration: Infinity,
       closeButton: false,
     });
     if (file.url) {
       const generatedTest = await generateTest(file.url, file.name);
       if (generatedTest) {
-        await saveGeneratedContent("test", generatedTest);
+        await saveGeneratedContent('test', generatedTest);
       }
     }
     toast.dismiss();
@@ -249,18 +243,18 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const handleGenerateFlashCards = async (
     file: FileObject,
-    e: React.MouseEvent,
+    e: React.MouseEvent
   ) => {
     e.stopPropagation();
-    toast("Generating flash cards...", {
-      position: "bottom-center",
+    toast('Generating flash cards...', {
+      position: 'bottom-center',
       duration: Infinity,
       closeButton: false,
     });
     if (file.url) {
       const generatedFlashCard = await generateFlashCards(file.url, file.name);
       if (generatedFlashCard) {
-        await saveGeneratedContent("flashcard", generatedFlashCard);
+        await saveGeneratedContent('flashcard', generatedFlashCard);
       }
     }
     toast.dismiss();
@@ -268,18 +262,18 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const handleGenerateCribSheet = async (
     file: FileObject,
-    e: React.MouseEvent,
+    e: React.MouseEvent
   ) => {
     e.stopPropagation();
-    toast("Generating crib sheet...", {
-      position: "bottom-center",
+    toast('Generating crib sheet...', {
+      position: 'bottom-center',
       duration: Infinity,
       closeButton: false,
     });
     if (file.url) {
       const generatedCribSheet = await generateCribSheet(file.url, file.name);
       if (generatedCribSheet) {
-        await saveGeneratedContent("cribsheet", generatedCribSheet);
+        await saveGeneratedContent('cribsheet', generatedCribSheet);
       }
     }
     toast.dismiss();
@@ -289,7 +283,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     setFlashcardsClicked(flashcardsClicked + 1);
 
     // Persist to Supabase
-    await supabase.from("user_statistics").upsert({
+    await supabase.from('user_statistics').upsert({
       user_id: classId,
       flashcards_clicked: flashcardsClicked + 1,
       cumulative_score: cumulativeScore,
@@ -301,7 +295,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     setCumulativeScore(newCumulativeScore);
 
     // Persist to Supabase
-    await supabase.from("user_statistics").upsert({
+    await supabase.from('user_statistics').upsert({
       user_id: classId,
       flashcards_clicked: flashcardsClicked,
       cumulative_score: newCumulativeScore,
@@ -312,13 +306,13 @@ export default function FileGallery({ classId }: { classId: string }) {
     if (generatedFlashCards.length > 0) {
       const allFlashcards: Flashcard[] = [];
 
-      generatedFlashCards.forEach((file) => {
+      generatedFlashCards.forEach(file => {
         const content = file.content;
 
         // Split the content by '---' to get individual flashcards
-        const entries = content.split("---");
+        const entries = content.split('---');
 
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           const trimmedEntry = entry.trim();
           if (trimmedEntry) {
             // Extract question and answer using regular expressions
@@ -355,11 +349,11 @@ export default function FileGallery({ classId }: { classId: string }) {
       <div className="mb-4 p-4 border rounded-lg shadow-md bg-white">
         <h3 className="text-2xl font-semibold mb-2">Statistics</h3>
         <p className="text-gray-700 text-lg font-bold mb-1">
-          Flashcards Mastered:{" "}
+          Flashcards Mastered:{' '}
           <span className="text-green-500">{flashcardsClicked}</span>
         </p>
         <p className="text-gray-700 text-lg font-bold">
-          Correct Practice Quiz Answers:{" "}
+          Correct Practice Quiz Answers:{' '}
           <span className="text-green-500">{cumulativeScore}</span>
         </p>
       </div>
@@ -375,7 +369,7 @@ export default function FileGallery({ classId }: { classId: string }) {
 
           {/* File list */}
           <div className="mt-4 space-y-2">
-            {files.map((file) => (
+            {files.map(file => (
               <FileListItem
                 key={file.name}
                 file={file}
@@ -423,10 +417,10 @@ export default function FileGallery({ classId }: { classId: string }) {
             renderExtraButtons={(item, index) => (
               <button
                 className="text-zinc-800 hover:underline ml-2"
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   if (item.id) {
-                    handleDeleteGeneratedContent("test", item.id);
+                    handleDeleteGeneratedContent('test', item.id);
                   }
                   console.log(index);
                 }}
@@ -446,10 +440,10 @@ export default function FileGallery({ classId }: { classId: string }) {
             renderExtraButtons={(item, index) => (
               <button
                 className="text-zinc-800 hover:underline ml-2"
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   if (item.id) {
-                    handleDeleteGeneratedContent("flashcard", item.id);
+                    handleDeleteGeneratedContent('flashcard', item.id);
                     console.log(index);
                   }
                 }}
@@ -469,10 +463,10 @@ export default function FileGallery({ classId }: { classId: string }) {
             renderExtraButtons={(item, index) => (
               <button
                 className="text-zinc-800 hover:underline ml-2"
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   if (item.id) {
-                    handleDeleteGeneratedContent("cribsheet", item.id);
+                    handleDeleteGeneratedContent('cribsheet', item.id);
                     console.log(index);
                   }
                 }}

@@ -4,19 +4,19 @@ import {
   forgotPasswordAction,
   resetPasswordAction,
   signOutAction,
-} from "@/app/actions";
-import { createClient } from "@/utils/supabase/server";
-import { encodedRedirect } from "@/utils/utils";
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
+} from '@/app/actions';
+import { createClient } from '@/utils/supabase/server';
+import { encodedRedirect } from '@/utils/utils';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 // Mock dependencies
-jest.mock("@/utils/supabase/server");
-jest.mock("next/headers");
-jest.mock("next/navigation");
-jest.mock("@/utils/utils");
+jest.mock('@/utils/supabase/server');
+jest.mock('next/headers');
+jest.mock('next/navigation');
+jest.mock('@/utils/utils');
 
-describe("Authentication Actions", () => {
+describe('Authentication Actions', () => {
   // Mock FormData
   const mockFormData = (data: Record<string, string>) => {
     return {
@@ -39,16 +39,16 @@ describe("Authentication Actions", () => {
     jest.clearAllMocks();
     (createClient as jest.Mock).mockResolvedValue(mockSupabase);
     (headers as jest.Mock).mockReturnValue({
-      get: jest.fn().mockReturnValue("http://localhost:3000"),
+      get: jest.fn().mockReturnValue('http://localhost:3000'),
     });
   });
 
-  describe("signUpAction", () => {
-    it("should successfully sign up a user", async () => {
+  describe('signUpAction', () => {
+    it('should successfully sign up a user', async () => {
       // Arrange
       const formData = mockFormData({
-        email: "test@example.com",
-        password: "password123",
+        email: 'test@example.com',
+        password: 'password123',
       });
       mockSupabase.auth.signUp.mockResolvedValue({ error: null });
 
@@ -57,20 +57,20 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(mockSupabase.auth.signUp).toHaveBeenCalledWith({
-        email: "test@example.com",
-        password: "password123",
+        email: 'test@example.com',
+        password: 'password123',
         options: {
-          emailRedirectTo: "http://localhost:3000/auth/callback",
+          emailRedirectTo: 'http://localhost:3000/auth/callback',
         },
       });
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "success",
-        "/sign-up",
-        "Thanks for signing up! Please check your email for a verification link.",
+        'success',
+        '/sign-up',
+        'Thanks for signing up! Please check your email for a verification link.'
       );
     });
 
-    it("should handle missing email or password", async () => {
+    it('should handle missing email or password', async () => {
       // Arrange
       const formData = mockFormData({});
 
@@ -80,19 +80,19 @@ describe("Authentication Actions", () => {
       // Assert
       expect(mockSupabase.auth.signUp).not.toHaveBeenCalled();
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "error",
-        "/sign-up",
-        "Email and password are required",
+        'error',
+        '/sign-up',
+        'Email and password are required'
       );
     });
 
-    it("should handle Supabase error", async () => {
+    it('should handle Supabase error', async () => {
       // Arrange
       const formData = mockFormData({
-        email: "test@example.com",
-        password: "password123",
+        email: 'test@example.com',
+        password: 'password123',
       });
-      const error = { message: "Email already registered", code: "auth-001" };
+      const error = { message: 'Email already registered', code: 'auth-001' };
       mockSupabase.auth.signUp.mockResolvedValue({ error });
 
       // Act
@@ -100,19 +100,19 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "error",
-        "/sign-up",
-        error.message,
+        'error',
+        '/sign-up',
+        error.message
       );
     });
   });
 
-  describe("signInAction", () => {
-    it("should successfully sign in a user", async () => {
+  describe('signInAction', () => {
+    it('should successfully sign in a user', async () => {
       // Arrange
       const formData = mockFormData({
-        email: "test@example.com",
-        password: "password123",
+        email: 'test@example.com',
+        password: 'password123',
       });
       mockSupabase.auth.signInWithPassword.mockResolvedValue({ error: null });
 
@@ -121,19 +121,19 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(mockSupabase.auth.signInWithPassword).toHaveBeenCalledWith({
-        email: "test@example.com",
-        password: "password123",
+        email: 'test@example.com',
+        password: 'password123',
       });
-      expect(redirect).toHaveBeenCalledWith("/protected");
+      expect(redirect).toHaveBeenCalledWith('/protected');
     });
 
-    it("should handle sign in error", async () => {
+    it('should handle sign in error', async () => {
       // Arrange
       const formData = mockFormData({
-        email: "test@example.com",
-        password: "wrong-password",
+        email: 'test@example.com',
+        password: 'wrong-password',
       });
-      const error = { message: "Invalid credentials" };
+      const error = { message: 'Invalid credentials' };
       mockSupabase.auth.signInWithPassword.mockResolvedValue({ error });
 
       // Act
@@ -141,18 +141,18 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "error",
-        "/sign-in",
-        error.message,
+        'error',
+        '/sign-in',
+        error.message
       );
     });
   });
 
-  describe("forgotPasswordAction", () => {
-    it("should successfully initiate password reset", async () => {
+  describe('forgotPasswordAction', () => {
+    it('should successfully initiate password reset', async () => {
       // Arrange
       const formData = mockFormData({
-        email: "test@example.com",
+        email: 'test@example.com',
       });
       mockSupabase.auth.resetPasswordForEmail.mockResolvedValue({
         error: null,
@@ -163,20 +163,20 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(mockSupabase.auth.resetPasswordForEmail).toHaveBeenCalledWith(
-        "test@example.com",
+        'test@example.com',
         {
           redirectTo:
-            "http://localhost:3000/auth/callback?redirect_to=/protected/reset-password",
-        },
+            'http://localhost:3000/auth/callback?redirect_to=/protected/reset-password',
+        }
       );
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "success",
-        "/forgot-password",
-        "Check your email for a link to reset your password.",
+        'success',
+        '/forgot-password',
+        'Check your email for a link to reset your password.'
       );
     });
 
-    it("should handle missing email", async () => {
+    it('should handle missing email', async () => {
       // Arrange
       const formData = mockFormData({});
 
@@ -186,19 +186,19 @@ describe("Authentication Actions", () => {
       // Assert
       expect(mockSupabase.auth.resetPasswordForEmail).not.toHaveBeenCalled();
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "error",
-        "/forgot-password",
-        "Email is required",
+        'error',
+        '/forgot-password',
+        'Email is required'
       );
     });
   });
 
-  describe("resetPasswordAction", () => {
-    it("should successfully reset password", async () => {
+  describe('resetPasswordAction', () => {
+    it('should successfully reset password', async () => {
       // Arrange
       const formData = mockFormData({
-        password: "newpassword123",
-        confirmPassword: "newpassword123",
+        password: 'newpassword123',
+        confirmPassword: 'newpassword123',
       });
       mockSupabase.auth.updateUser.mockResolvedValue({ error: null });
 
@@ -207,20 +207,20 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(mockSupabase.auth.updateUser).toHaveBeenCalledWith({
-        password: "newpassword123",
+        password: 'newpassword123',
       });
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "success",
-        "/protected/reset-password",
-        "Password updated",
+        'success',
+        '/protected/reset-password',
+        'Password updated'
       );
     });
 
-    it("should handle password mismatch", async () => {
+    it('should handle password mismatch', async () => {
       // Arrange
       const formData = mockFormData({
-        password: "newpassword123",
-        confirmPassword: "different-password",
+        password: 'newpassword123',
+        confirmPassword: 'different-password',
       });
 
       // Act
@@ -229,15 +229,15 @@ describe("Authentication Actions", () => {
       // Assert
       expect(mockSupabase.auth.updateUser).not.toHaveBeenCalled();
       expect(encodedRedirect).toHaveBeenCalledWith(
-        "error",
-        "/protected/reset-password",
-        "Passwords do not match",
+        'error',
+        '/protected/reset-password',
+        'Passwords do not match'
       );
     });
   });
 
-  describe("signOutAction", () => {
-    it("should successfully sign out user", async () => {
+  describe('signOutAction', () => {
+    it('should successfully sign out user', async () => {
       // Arrange
       mockSupabase.auth.signOut.mockResolvedValue({ error: null });
 
@@ -246,7 +246,7 @@ describe("Authentication Actions", () => {
 
       // Assert
       expect(mockSupabase.auth.signOut).toHaveBeenCalled();
-      expect(redirect).toHaveBeenCalledWith("/sign-in");
+      expect(redirect).toHaveBeenCalledWith('/sign-in');
     });
   });
 });

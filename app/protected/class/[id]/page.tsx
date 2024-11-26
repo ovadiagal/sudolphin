@@ -1,7 +1,7 @@
-import FileGallery from "@/components/file-gallery";
-import { createClient } from "@/utils/supabase/server";
-import { notFound } from "next/navigation";
-import { ClassHeader } from "@/components/class-header";
+import FileGallery from '@/components/file-gallery';
+import { createClient } from '@/utils/supabase/server';
+import { notFound } from 'next/navigation';
+import { ClassHeader } from '@/components/class-header';
 
 export default async function ClassPage({
   params,
@@ -14,9 +14,9 @@ export default async function ClassPage({
   const supabase = await createClient();
 
   const { data: classData, error } = await supabase
-    .from("Classes")
-    .select("*")
-    .eq("id", id)
+    .from('Classes')
+    .select('*')
+    .eq('id', id)
     .single();
 
   if (error || !classData) {

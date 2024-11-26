@@ -1,6 +1,6 @@
-import React from "react";
-import { FaDownload, FaShareAlt } from "react-icons/fa";
-import jsPDF from "jspdf";
+import React from 'react';
+import { FaDownload, FaShareAlt } from 'react-icons/fa';
+import jsPDF from 'jspdf';
 
 interface GeneratedItem {
   id?: number;
@@ -28,9 +28,9 @@ export function GeneratedContent({
   //just slightly changing the functionality of the handleDownloadPDF and handleSharePDF functions to account for sharing as well
   const generatePDF = (item: GeneratedItem) => {
     const doc = new jsPDF({
-      orientation: "portrait",
-      unit: "pt",
-      format: "letter",
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'letter',
     });
 
     const margin = 40; // Margin from each edge
@@ -39,8 +39,8 @@ export function GeneratedContent({
     const maxLineWidth = pageWidth - margin * 2;
     const lineHeight = 14; // Height of each line
     const fontSize = 12;
-    const textColor = "#000000";
-    const fontName = "Helvetica";
+    const textColor = '#000000';
+    const fontName = 'Helvetica';
 
     doc.setFont(fontName);
     doc.setFontSize(fontSize);
@@ -66,19 +66,19 @@ export function GeneratedContent({
 
   const handleDownloadPDF = (item: GeneratedItem) => {
     const doc = generatePDF(item);
-    doc.save(`${item.fileName}-${title.replace(/\s+/g, "_")}.pdf`);
+    doc.save(`${item.fileName}-${title.replace(/\s+/g, '_')}.pdf`);
   };
 
   // Add a new function to handle sharing the PDF
   const handleSharePDF = async (item: GeneratedItem) => {
     const doc = generatePDF(item);
-    const pdfBlob = doc.output("blob");
+    const pdfBlob = doc.output('blob');
 
     // Check if the browser supports the Web Share API
     if (navigator.share) {
       // Create a new File object from the PDF blob
       const file = new File([pdfBlob], `${item.fileName}.pdf`, {
-        type: "application/pdf",
+        type: 'application/pdf',
       });
       try {
         // Share the PDF file
@@ -89,12 +89,12 @@ export function GeneratedContent({
         });
         // Log the sharing action
       } catch (error) {
-        console.error("Error sharing PDF:", error);
+        console.error('Error sharing PDF:', error);
       }
       // If the Web Share API is not supported, show an alert
     } else {
       alert(
-        "Sharing is not supported in your browser. You can download the file and share it manually.",
+        'Sharing is not supported in your browser. You can download the file and share it manually.'
       );
     }
   };
