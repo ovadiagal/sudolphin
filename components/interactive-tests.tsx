@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 interface Option {
   label: string;
@@ -25,21 +25,21 @@ export const TestApp: React.FC<TestAppProps> = ({
   const [score, setScore] = useState(0);
   const [attemptedQuestions, setAttemptedQuestions] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
-  const [testName, setTestName] = useState("");
+  const [testName, setTestName] = useState('');
   const [showScore, setShowScore] = useState(false);
 
   useEffect(() => {
     if (tests && tests.length > 0) {
       const allQuestions: Question[] = [];
 
-      tests.forEach((test) => {
+      tests.forEach(test => {
         const content = test.content;
         setTestName(test.fileName);
 
         // Split the content by '---' to get individual questions
-        const entries = content.split("---");
+        const entries = content.split('---');
 
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           const trimmedEntry = entry.trim();
           if (trimmedEntry) {
             // Extract question
@@ -62,7 +62,7 @@ export const TestApp: React.FC<TestAppProps> = ({
 
             // Extract correct answer
             const correctAnswerMatch = trimmedEntry.match(
-              /Correct answer:\s*([A-D])/m,
+              /Correct answer:\s*([A-D])/m
             );
             if (!correctAnswerMatch) return;
 
@@ -82,8 +82,8 @@ export const TestApp: React.FC<TestAppProps> = ({
   }, [tests]);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : parsedQuestions.length - 1,
+    setCurrentIndex(prevIndex =>
+      prevIndex > 0 ? prevIndex - 1 : parsedQuestions.length - 1
     );
   };
 
@@ -123,7 +123,7 @@ export const TestApp: React.FC<TestAppProps> = ({
               if (!attemptedQuestions.has(currentIndex)) {
                 setScore(score + 1);
                 setAttemptedQuestions(
-                  new Set(attemptedQuestions).add(currentIndex),
+                  new Set(attemptedQuestions).add(currentIndex)
                 );
               }
             }}
@@ -190,7 +190,7 @@ const TestComponent: React.FC<{
   onCorrectAnswer: () => void;
 }> = ({ question, onCorrectAnswer }) => {
   const [selectedOptionLabel, setSelectedOptionLabel] = useState<string | null>(
-    null,
+    null
   );
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -212,16 +212,16 @@ const TestComponent: React.FC<{
     <div className="test-question border border-gray-300 p-4 m-2 rounded-lg shadow-md bg-white">
       <div className="text-lg font-medium mb-4">{question.question}</div>
       <div className="options space-y-2">
-        {question.options.map((option) => (
+        {question.options.map(option => (
           <button
             key={option.label}
             onClick={() => handleOptionClick(option.label)}
             className={`block w-full text-left px-4 py-2 border rounded ${
               showAnswer && option.label === question.correctAnswer
-                ? "bg-green-100"
+                ? 'bg-green-100'
                 : showAnswer && option.label === selectedOptionLabel
-                  ? "bg-red-100"
-                  : "bg-white"
+                  ? 'bg-red-100'
+                  : 'bg-white'
             }`}
           >
             {option.label}) {option.text}

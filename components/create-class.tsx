@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useTransition } from "react";
-import { FaPlusCircle } from "react-icons/fa";
-import { SubmitButton } from "./submit-button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { IoCloseSharp } from "react-icons/io5";
-import { createClass } from "@/app/actions/class";
-import { toast } from "sonner";
+import { useState, useTransition } from 'react';
+import { FaPlusCircle } from 'react-icons/fa';
+import { SubmitButton } from './submit-button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { IoCloseSharp } from 'react-icons/io5';
+import { createClass } from '@/app/actions/class';
+import { toast } from 'sonner';
 
 const COLORS = [
-  "#ef4444", // red
-  "#f97316", // orange
-  "#84cc16", // lime
-  "#22c55e", // green
-  "#06b6d4", // cyan
-  "#3b82f6", // blue
-  "#a855f7", // purple
-  "#ec4899", // pink
+  '#ef4444', // red
+  '#f97316', // orange
+  '#84cc16', // lime
+  '#22c55e', // green
+  '#06b6d4', // cyan
+  '#3b82f6', // blue
+  '#a855f7', // purple
+  '#ec4899', // pink
 ];
 
 const CreateClass = () => {
@@ -46,10 +46,10 @@ const CreateClass = () => {
     startTransition(async () => {
       try {
         await createClass(formData);
-        toast.success("Class created successfully!");
+        toast.success('Class created successfully!');
         handleCloseModal();
       } catch (error) {
-        toast.error("Failed to create class");
+        toast.error('Failed to create class');
         console.error(error);
       }
     });
@@ -70,13 +70,13 @@ const CreateClass = () => {
       {isModalOpen && (
         <div
           className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-200 ${
-            isAnimating ? "opacity-100" : "opacity-0"
+            isAnimating ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={handleBackdropClick}
         >
           <div
             className={`bg-white dark:bg-zinc-900 p-8 rounded-lg w-[25rem] transform transition-transform duration-200 ${
-              isAnimating ? "scale-100" : "scale-95"
+              isAnimating ? 'scale-100' : 'scale-95'
             }`}
           >
             <form
@@ -115,7 +115,7 @@ const CreateClass = () => {
                   Color
                 </Label>
                 <div className="flex gap-3 flex-wrap justify-center py-2">
-                  {COLORS.map((color) => (
+                  {COLORS.map(color => (
                     <button
                       key={color}
                       type="button"
@@ -123,8 +123,8 @@ const CreateClass = () => {
                       onClick={() => setSelectedColor(color)}
                       className={`w-6 h-6 rounded-full transition-transform ${
                         selectedColor === color
-                          ? "scale-110 ring-2 ring-offset-2 ring-black dark:ring-white dark:ring-offset-zinc-900"
-                          : ""
+                          ? 'scale-110 ring-2 ring-offset-2 ring-black dark:ring-white dark:ring-offset-zinc-900'
+                          : ''
                       }`}
                       style={{ backgroundColor: color }}
                     />
