@@ -1,96 +1,95 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
-
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
-
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+# Sudolphin
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- Course Dashboard:
+  - Add classes to the dashboard to manage your courseload
+  - Drag-and-drop course materials (PDF, DOCX, PPTX, TXT) to manage resources
+- AI-Generated Study Resources:
+  - Flashcard Generation
+  - Practice Tests
+  - Crib Sheets
 
-## Demo
+## Installation Guide
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+### Pre-Requesties/Dependenices:
 
-## Deploy to Vercel
+Operating System: Windows, macOS, or Linux
 
-Vercel deployment will guide you through creating a Supabase account and project.
+To run the project locally install:
+- [Node.JS and npm](https://nodejs.org/en/download/package-manager)
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+The project requires the following npm packages:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+- Typescript
+- Supabase Auth
+- TailwindCSS
+- Jest
+- Playwright
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+These will be installed automatically.
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+A modern web browser (e.g., Google Chrome, Mozilla Firefox) required to run local host.
 
-## Clone and run locally
+### Setup Steps
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+```bash
+# Clone repository
+git clone https://github.com/ovadiagal/sudolphin.git
 
-2. Create a Next.js app using the Supabase Starter template npx command
+cd sudolphin
 
-   ```bash
-   npx create-next-app -e with-supabase
-   ```
+npm ci
+```
 
-3. Use `cd` to change into the app's directory
+The environment variables for the OpenAI and Supabase secrets also need to be setup.
 
-   ```bash
-   cd name-of-new-app
-   ```
+Modify or create `.env` to with this template:
 
-4. Rename `.env.example` to `.env.local` and update the following:
+```
+NEXT_PUBLIC_SUPABASE_URL={YOUR_SUPABASE_DB_URL}
+NEXT_PUBLIC_SUPABASE_ANON_KEY={YOUR_SUPABASE_KEY}
+OPENAI_API_KEY={YOUR_OPENAI_KEY}
+```
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+### Running
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+With the dependencies and libraries installed, run:
 
-5. You can now run the Next.js local development server:
+`npm run dev`
 
-   ```bash
-   npm run dev
-   ```
+to start the Node server locally at `localhost:3000`.
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+To run white-box end-to-end tests run the npm script:
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+`npm run test:e2e`
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+or
 
-## Feedback and issues
+`npm run test:e2e:ui` for a gui.
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+To run black-box unit tests run the npm script:
 
-## More Supabase examples
+`npm run test`
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+or
+
+`npm run test:coverage` to generate a coverage report.
+
+## Troubleshoot
+
+- Error: Supabase authentication failed.
+- Solution: Verify that the NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY values in .env are correct.
+
+- Error: OPENAI_API_KEY is missing.
+- Solution: Ensure your OpenAI API Key is correctly set in the .env file.
+
+- Error: Cannot connect to localhost:3000.
+- Solution: Confirm Node.js is installed and that the development server is running.
+
+- Error: Tests fail unexpectedly.
+- Solution: Ensure all dependencies are installed by running npm ci again.
+
+
+- Work Done By: Gal Ovadia, Rana Myneni, Matthew Perry, Cas Copeland, Jacob Kotzian, Maeci Frank
+
