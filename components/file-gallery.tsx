@@ -396,6 +396,7 @@ export default function FileGallery({ classId }: { classId: string }) {
                   e.stopPropagation();
                   if (item.id) {
                     handleDeleteGeneratedContent('flashcard', item.id);
+                    console.log(index);
                   }
                 }}
               >
