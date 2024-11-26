@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { FaFile, FaTrash, FaEllipsisV } from 'react-icons/fa';
-import { toast } from 'sonner';
-import { deleteFile } from '@/app/actions/file';
+import React, { useState } from "react";
+import { FaFile, FaTrash, FaEllipsisV } from "react-icons/fa";
+import { toast } from "sonner";
+import { deleteFile } from "@/app/actions/file";
 
 interface FileObject {
   name: string;
@@ -17,7 +17,10 @@ interface FileListItemProps {
   onFileClick: (file: FileObject) => void;
   fetchFiles: () => void;
   onGenerateTest: (file: FileObject, e: React.MouseEvent) => Promise<void>;
-  onGenerateFlashCards: (file: FileObject, e: React.MouseEvent) => Promise<void>;
+  onGenerateFlashCards: (
+    file: FileObject,
+    e: React.MouseEvent,
+  ) => Promise<void>;
   onGenerateCribSheet: (file: FileObject, e: React.MouseEvent) => Promise<void>;
 }
 
@@ -36,10 +39,10 @@ export function FileListItem({
     e.stopPropagation();
     try {
       await deleteFile(classId, file.name);
-      toast.success('File deleted successfully');
+      toast.success("File deleted successfully");
       fetchFiles();
     } catch (error) {
-      toast.error('Failed to delete file');
+      toast.error("Failed to delete file");
       console.error(error);
     }
   };

@@ -37,7 +37,10 @@ export default async function ClassTiles() {
             <span className="text-xl">{classItem.name}</span>
           </Link>
           <DeleteClassButton classId={classItem.id} />
-          <ColorClassButton classId={classItem.id} initialColor={classItem.color}/>
+          <ColorClassButton
+            classId={classItem.id}
+            initialColor={classItem.color}
+          />
         </div>
       ))}
       <CreateClass />

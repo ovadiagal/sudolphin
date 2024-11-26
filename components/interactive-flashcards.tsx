@@ -1,6 +1,6 @@
 // FlashcardApp.jsx
-import React, { useState, useEffect } from 'react';
-import { FaStar, FaRegStar } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { FaStar, FaRegStar } from "react-icons/fa";
 
 export interface Flashcard {
   question: string;
@@ -29,24 +29,24 @@ const FlashcardComponent: React.FC<{
   return (
     <div
       style={{
-        border: '1px solid #ccc',
-        padding: '20px',
-        margin: '20px auto',
-        minHeight: '150px',
-        width: '300px',
-        backgroundColor: '#95c7f5',
-        borderRadius: '8px',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-        userSelect: 'none',
-        display: 'flex',
-        flexDirection: 'column',
+        border: "1px solid #ccc",
+        padding: "20px",
+        margin: "20px auto",
+        minHeight: "150px",
+        width: "300px",
+        backgroundColor: "#95c7f5",
+        borderRadius: "8px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+        userSelect: "none",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'flex-end',
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "flex-end",
         }}
       >
         <button
@@ -58,13 +58,15 @@ const FlashcardComponent: React.FC<{
           onMouseEnter={() => setIsIconHovered(true)}
           onMouseLeave={() => setIsIconHovered(false)}
           style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '1.5rem',
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "1.5rem",
           }}
-          title={isStarred ? 'Unstar this flashcard' : 'Star this flashcard'}
-          aria-label={isStarred ? 'Unstar this flashcard' : 'Star this flashcard'}
+          title={isStarred ? "Unstar this flashcard" : "Star this flashcard"}
+          aria-label={
+            isStarred ? "Unstar this flashcard" : "Star this flashcard"
+          }
         >
           {isStarred || isIconHovered ? (
             <FaStar color="gold" />
@@ -76,14 +78,14 @@ const FlashcardComponent: React.FC<{
       <div
         onClick={handleFlip}
         style={{
-          cursor: 'pointer',
+          cursor: "pointer",
           flexGrow: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '1.2rem',
-          textAlign: 'center',
-          padding: '10px',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "1.2rem",
+          textAlign: "center",
+          padding: "10px",
         }}
       >
         {flipped ? flashcard.answer : flashcard.question}
@@ -92,7 +94,10 @@ const FlashcardComponent: React.FC<{
   );
 };
 
-export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashcardClick }) => {
+export const FlashcardApp: React.FC<FlashcardAppProps> = ({
+  flashcards,
+  onFlashcardClick,
+}) => {
   const [starredIndices, setStarredIndices] = useState<Set<number>>(new Set());
   const [unstarredIndices, setUnstarredIndices] = useState<number[]>([]);
   const [currentIndexUnstarred, setCurrentIndexUnstarred] = useState(0);
@@ -120,14 +125,14 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
   const handlePrev = () => {
     if (unstarredIndices.length === 0) return;
     setCurrentIndexUnstarred((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : unstarredIndices.length - 1
+      prevIndex > 0 ? prevIndex - 1 : unstarredIndices.length - 1,
     );
   };
 
   const handleNext = () => {
     if (unstarredIndices.length === 0) return;
-    setCurrentIndexUnstarred((prevIndex) =>
-      (prevIndex + 1) % unstarredIndices.length
+    setCurrentIndexUnstarred(
+      (prevIndex) => (prevIndex + 1) % unstarredIndices.length,
     );
   };
 
@@ -141,7 +146,7 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
 
     // Remove current index from unstarredIndices
     setUnstarredIndices((prev) =>
-      prev.filter((index) => index !== currentFlashcardIndex)
+      prev.filter((index) => index !== currentFlashcardIndex),
     );
 
     // Adjust currentIndexUnstarred if needed
@@ -168,9 +173,10 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
   if (showRetake) {
     return (
       <div className="mt-4 text-left p-4 bg-white shadow-lg">
-        <h2>You've completed all flashcards! Would you like to retake the session?</h2>
-        <p>
-        </p>
+        <h2>
+          You've completed all flashcards! Would you like to retake the session?
+        </h2>
+        <p></p>
         <button
           onClick={handleRetake}
           className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
@@ -205,34 +211,38 @@ export const FlashcardApp: React.FC<FlashcardAppProps> = ({ flashcards, onFlashc
       />
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '20px',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "20px",
         }}
       >
         <button
           onClick={handlePrev}
           style={{
-            marginRight: '10px',
-            padding: '10px 20px',
-            fontSize: '1rem',
-            cursor: 'pointer',
+            marginRight: "10px",
+            padding: "10px 20px",
+            fontSize: "1rem",
+            cursor: "pointer",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.textDecoration = "underline")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
         >
           &larr; Previous
         </button>
         <button
           onClick={handleNext}
           style={{
-            padding: '10px 20px',
-            fontSize: '1rem',
-            cursor: 'pointer',
+            padding: "10px 20px",
+            fontSize: "1rem",
+            cursor: "pointer",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.textDecoration = "underline")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
         >
           Next &rarr;
         </button>

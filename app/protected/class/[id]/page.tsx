@@ -31,7 +31,6 @@ export default async function ClassPage({
         <div className="w-full bg-card rounded-lg p-6">
           <FileGallery classId={id} />
         </div>
-
       </div>
     </div>
   );
