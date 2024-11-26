@@ -12,6 +12,7 @@ import { FileListItem } from './FileListItem';
 import { GeneratedContent } from './GeneratedContent';
 import { FlashcardApp, Flashcard } from './interactive-flashcards';
 import { TestApp } from './interactive-tests';
+import { FaTrash } from 'react-icons/fa';
 
 interface FileObject {
   name: string;
@@ -22,6 +23,7 @@ interface FileObject {
 }
 
 interface GeneratedItem {
+  id?: number;
   fileName: string;
   content: string;
 }
@@ -69,8 +71,50 @@ export default function FileGallery({ classId }: { classId: string }) {
     setFiles(filteredFilesWithUrls);
   };
 
+  // Fetch generated content
+  const fetchGeneratedContent = async () => {
+    const { data, error } = await supabase
+      .from('generated_content')
+      .select('*')
+      .eq('class_id', classId);
+
+    if (error) {
+      toast.error('Error loading generated content');
+      return;
+    }
+
+    const tests = data?.filter((item) => item.type === 'test') || [];
+    const flashcards = data?.filter((item) => item.type === 'flashcard') || [];
+    const cribsheets = data?.filter((item) => item.type === 'cribsheet') || [];
+
+    setGeneratedTests(
+      tests.map((item) => ({
+        id: item.id,
+        fileName: item.file_name,
+        content: item.content,
+      }))
+    );
+
+    setGeneratedFlashCards(
+      flashcards.map((item) => ({
+        id: item.id,
+        fileName: item.file_name,
+        content: item.content,
+      }))
+    );
+
+    setGeneratedCribSheets(
+      cribsheets.map((item) => ({
+        id: item.id,
+        fileName: item.file_name,
+        content: item.content,
+      }))
+    );
+  };
+
   useEffect(() => {
     fetchFiles();
+    fetchGeneratedContent();
   }, [classId]);
 
   const handleFileClick = (file: FileObject) => {
@@ -79,9 +123,51 @@ export default function FileGallery({ classId }: { classId: string }) {
     }
   };
 
+  const saveGeneratedContent = async (type: string, content: GeneratedItem) => {
+    const { data, error } = await supabase
+      .from('generated_content')
+      .insert([{ class_id: classId, type, file_name: content.fileName, content: content.content }])
+      .select();
+
+    if (error) {
+      toast.error('Error saving generated content');
+    } else {
+      const newItem = { id: data[0].id, fileName: content.fileName, content: content.content };
+      if (type === 'test') {
+        setGeneratedTests((prevTests) => [...prevTests, newItem]);
+      } else if (type === 'flashcard') {
+        setGeneratedFlashCards((prevFlashCards) => [...prevFlashCards, newItem]);
+      } else if (type === 'cribsheet') {
+        setGeneratedCribSheets((prevCribSheets) => [...prevCribSheets, newItem]);
+      }
+    }
+  };
+
+  const handleDeleteGeneratedContent = async (type: string, id: number) => {
+    const { error } = await supabase
+      .from('generated_content')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      toast.error('Error deleting generated content');
+    } else {
+      if (type === 'test') {
+        setGeneratedTests((prevTests) => prevTests.filter((item) => item.id !== id));
+        setSelectedTestIndex(null);
+      } else if (type === 'flashcard') {
+        setGeneratedFlashCards((prevFlashCards) => prevFlashCards.filter((item) => item.id !== id));
+        setSelectedFlashCardIndex(null);
+      } else if (type === 'cribsheet') {
+        setGeneratedCribSheets((prevCribSheets) => prevCribSheets.filter((item) => item.id !== id));
+        setSelectedCribSheetIndex(null);
+      }
+    }
+  };
+
   const handleGenerateTest = async (file: FileObject, e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.info('Generating practice test...', {
+    toast('Generating practice test...', {
       position: 'bottom-center',
       duration: Infinity,
       closeButton: false,
@@ -89,7 +175,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     if (file.url) {
       const generatedTest = await generateTest(file.url, file.name);
       if (generatedTest) {
-        setGeneratedTests((prevTests) => [...prevTests, generatedTest]);
+        await saveGeneratedContent('test', generatedTest);
       }
     }
     toast.dismiss();
@@ -97,7 +183,7 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const handleGenerateFlashCards = async (file: FileObject, e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.info('Generating flash cards...', {
+    toast('Generating flash cards...', {
       position: 'bottom-center',
       duration: Infinity,
       closeButton: false,
@@ -105,7 +191,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     if (file.url) {
       const generatedFlashCard = await generateFlashCards(file.url, file.name);
       if (generatedFlashCard) {
-        setGeneratedFlashCards((prevFlashCards) => [...prevFlashCards, generatedFlashCard]);
+        await saveGeneratedContent('flashcard', generatedFlashCard);
       }
     }
     toast.dismiss();
@@ -113,7 +199,7 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   const handleGenerateCribSheet = async (file: FileObject, e: React.MouseEvent) => {
     e.stopPropagation();
-    toast.info('Generating crib sheet...', {
+    toast('Generating crib sheet...', {
       position: 'bottom-center',
       duration: Infinity,
       closeButton: false,
@@ -121,7 +207,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     if (file.url) {
       const generatedCribSheet = await generateCribSheet(file.url, file.name);
       if (generatedCribSheet) {
-        setGeneratedCribSheets((prevCribSheets) => [...prevCribSheets, generatedCribSheet]);
+        await saveGeneratedContent('cribsheet', generatedCribSheet);
       }
     }
     toast.dismiss();
@@ -155,12 +241,16 @@ export default function FileGallery({ classId }: { classId: string }) {
       });
 
       setParsedFlashcards(allFlashcards);
+    } else {
+      setParsedFlashcards([]);
     }
   }, [generatedFlashCards]);
 
   useEffect(() => {
     if (generatedTests.length > 0) {
       setParsedTests(generatedTests);
+    } else {
+      setParsedTests([]);
     }
   }, [generatedTests]);
 
@@ -168,7 +258,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     <div className="flex flex-col">
       <div className="flex gap-4">
         {/* Left Side: File Upload and List */}
-        <div className="w-1/2 flex flex-col gap-4">
+        <div className="w-1/2 flex flex-col gap-4 border p-4 rounded-lg shadow-md bg-white">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold">Files</h2>
           </div>
@@ -211,8 +301,11 @@ export default function FileGallery({ classId }: { classId: string }) {
           )}
         </div>
 
+        {/* Gap between file upload and generated content */}
+        <div className="w-1/12"></div>
+
         {/* Right Side: Generated Content */}
-        <div className="w-1/2 flex flex-col gap-4">
+        <div className="w-1/2 flex flex-col gap-4 border p-4 rounded-lg shadow-md bg-white">
           {/* Generated Tests */}
           <GeneratedContent
             title="Generated Tests"
@@ -220,6 +313,20 @@ export default function FileGallery({ classId }: { classId: string }) {
             selectedIndex={selectedTestIndex}
             onItemSelect={setSelectedTestIndex}
             colorClass="text-blue-500"
+            renderExtraButtons={(item, index) => (
+              <button
+                className="text-red-500 hover:underline ml-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (item.id) {
+                    handleDeleteGeneratedContent('test', item.id);
+                  }
+                  console.log(index);
+                }}
+              >
+                <FaTrash size={14} />
+              </button>
+            )}
           />
 
           {/* Generated Flash Cards */}
@@ -229,6 +336,20 @@ export default function FileGallery({ classId }: { classId: string }) {
             selectedIndex={selectedFlashCardIndex}
             onItemSelect={setSelectedFlashCardIndex}
             colorClass="text-green-500"
+            renderExtraButtons={(item, index) => (
+              <button
+                className="text-red-500 hover:underline ml-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (item.id) {
+                    handleDeleteGeneratedContent('flashcard', item.id);
+                    console.log(index);
+                  }
+                }}
+              >
+                <FaTrash size={14} />
+              </button>
+            )}
           />
 
           {/* Generated Crib Sheets */}
@@ -238,18 +359,32 @@ export default function FileGallery({ classId }: { classId: string }) {
             selectedIndex={selectedCribSheetIndex}
             onItemSelect={setSelectedCribSheetIndex}
             colorClass="text-purple-500"
+            renderExtraButtons={(item, index) => (
+              <button
+                className="text-red-500 hover:underline ml-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (item.id) {
+                    handleDeleteGeneratedContent('cribsheet', item.id);
+                    console.log(index);
+                  }
+                }}
+              >
+                <FaTrash size={14} />
+              </button>
+            )}
           />
         </div>
       </div>
 
       {/* Interactive Flashcards */}
-      <div className="flashcard-app mt-8">
+      <div className="flashcard-app mt-8 border p-4 rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-4">Interactive Flashcards</h2>
         <FlashcardApp flashcards={parsedFlashcards} />
       </div>
 
       {/* Interactive Practice Quiz */}
-      <div className="test-app mt-8">
+      <div className="test-app mt-8 border p-4 rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-4">Interactive Practice Quiz</h2>
         <TestApp tests={parsedTests} />
       </div>

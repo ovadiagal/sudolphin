@@ -32,7 +32,7 @@ const FlashcardComponent: React.FC<{ flashcard: Flashcard }> = ({ flashcard }) =
         justifyContent: 'center',
         fontSize: '1.2rem',
         userSelect: 'none',
-        backgroundColor: '#fff',
+        backgroundColor: '#95c7f5',
         borderRadius: '8px',
         boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
       }}

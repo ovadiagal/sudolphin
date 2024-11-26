@@ -1,18 +1,20 @@
 import React from 'react';
+import { FaDownload } from 'react-icons/fa';
 import jsPDF from 'jspdf';
-import { FaDownload } from 'react-icons/fa'; // Import the download icon
 
 interface GeneratedItem {
+  id?: number;
   fileName: string;
   content: string;
 }
 
-interface GeneratedContentProps {
+export interface GeneratedContentProps {
   title: string;
   items: GeneratedItem[];
   selectedIndex: number | null;
   onItemSelect: (index: number | null) => void;
   colorClass: string;
+  renderExtraButtons?: (item: GeneratedItem, index: number) => React.ReactNode;
 }
 
 export function GeneratedContent({
@@ -21,6 +23,7 @@ export function GeneratedContent({
   selectedIndex,
   onItemSelect,
   colorClass,
+  renderExtraButtons,
 }: GeneratedContentProps) {
   const handleDownloadPDF = (item: GeneratedItem) => {
     const doc = new jsPDF({
@@ -80,16 +83,18 @@ export function GeneratedContent({
                 {/* Download PDF Button */}
                 <button
                   onClick={() => handleDownloadPDF(item)}
-                  className="ml-4 text-gray-900 dark:text-gray-100 hover:text-gray-700"
+                  className="ml-4 text-gray-900 hover:text-gray-700"
                   title="Download PDF"
                 >
                   <FaDownload size={16} />
                 </button>
+                {/* Render Extra Buttons */}
+                {renderExtraButtons && renderExtraButtons(item, index)}
               </li>
             ))}
           </ul>
 
-          {selectedIndex !== null && (
+          {selectedIndex !== null && selectedIndex < items.length && (
             <div className="mt-4 p-4 border rounded-lg bg-gray-50">
               <div className="flex justify-between items-center mb-2">
                 <h4 className="text-xl font-semibold">
