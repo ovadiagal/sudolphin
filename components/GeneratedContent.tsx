@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaDownload } from 'react-icons/fa';
+import jsPDF from 'jspdf';
 
 interface GeneratedItem {
   id?: number;
@@ -25,7 +26,41 @@ export function GeneratedContent({
   renderExtraButtons,
 }: GeneratedContentProps) {
   const handleDownloadPDF = (item: GeneratedItem) => {
-    // ... existing code for PDF generation ...
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'letter',
+    });
+
+    const margin = 40; // Margin from each edge
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxLineWidth = pageWidth - margin * 2;
+    const lineHeight = 14; // Height of each line
+    const fontSize = 12;
+    const textColor = '#000000';
+    const fontName = 'Helvetica';
+
+    doc.setFont(fontName);
+    doc.setFontSize(fontSize);
+    doc.setTextColor(textColor);
+
+    // Explicitly assert that 'lines' is a string array
+    const lines = doc.splitTextToSize(item.content, maxLineWidth) as string[];
+
+    let cursorY = margin;
+
+    lines.forEach((line: string) => {
+      if (cursorY + lineHeight > pageHeight - margin) {
+        doc.addPage();
+        cursorY = margin;
+      }
+
+      doc.text(line, margin, cursorY);
+      cursorY += lineHeight;
+    });
+
+    doc.save(`${item.fileName}-${title.replace(/\s+/g, '_')}.pdf`);
   };
 
   return (
