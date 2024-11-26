@@ -1,4 +1,4 @@
-// pages/api/generate-study-material.ts
+// pages/api/generate-crib-sheets.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
 import pdf from 'pdf-parse';
