@@ -170,7 +170,7 @@ export default function FileGallery({ classId }: { classId: string }) {
       }
     }
   };
-
+  // Handle Generating Content
   const handleDeleteGeneratedContent = async (type: string, id: number) => {
     const { error } = await supabase
       .from('generated_content')
