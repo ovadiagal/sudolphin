@@ -136,7 +136,7 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded shadow-lg">
                 <h1 className="text-2xl mb-4">Your Score: {score} / {parsedQuestions.length}</h1>
-                <button onClick={handleDismiss} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
+                <button onClick={handleDismiss} className="px-4 py-2 bg-black hover:bg-zinc-800 disabled:bg-black/50 text-white rounded mr-2">
                   Dismiss
                 </button>
                 <button onClick={handleRetake} className="px-4 py-2 bg-green-500 text-white rounded">
