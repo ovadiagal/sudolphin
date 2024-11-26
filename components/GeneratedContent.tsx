@@ -69,21 +69,27 @@ export function GeneratedContent({
     doc.save(`${item.fileName}-${title.replace(/\s+/g, '_')}.pdf`);
   };
 
+  // Add a new function to handle sharing the PDF
   const handleSharePDF = async (item: GeneratedItem) => {
     const doc = generatePDF(item);
     const pdfBlob = doc.output('blob');
 
+    // Check if the browser supports the Web Share API
     if (navigator.share) {
+      // Create a new File object from the PDF blob
       const file = new File([pdfBlob], `${item.fileName}.pdf`, { type: 'application/pdf' });
       try {
+        // Share the PDF file
         await navigator.share({
           files: [file],
           title: item.fileName,
           text: `Check out this PDF: ${item.fileName}`,
         });
+        // Log the sharing action
       } catch (error) {
         console.error('Error sharing PDF:', error);
       }
+      // If the Web Share API is not supported, show an alert
     } else {
       alert('Sharing is not supported in your browser. You can download the file and share it manually.');
     }
@@ -108,7 +114,9 @@ export function GeneratedContent({
                 </button>
                 {/* Share PDF Button */}
                 <button
+                // Add a new button to share the PDF
                   onClick={() => handleSharePDF(item)}
+                  // Add a new class to style the button
                   className="ml-4 text-gray-700 hover:text-gray-700"
                   title="Share PDF"
                 >
