@@ -121,17 +121,21 @@ export default function FileGallery({ classId }: { classId: string }) {
       .select('flashcards_clicked, cumulative_score')
       .eq('user_id', classId)
       .single();
-
-    if (error) {
+  
+    if (error && error.code !== 'PGRST116') { // PGRST116 is the code for "No rows found"
       console.error('Error fetching statistics:', error);
       toast.error('Error loading statistics');
       return;
     }
-
+  
     if (data) {
       console.log('Fetched statistics:', data);
-      setFlashcardsClicked(data.flashcards_clicked);
-      setCumulativeScore(data.cumulative_score);
+      setFlashcardsClicked(data.flashcards_clicked || 0);
+      setCumulativeScore(data.cumulative_score || 0);
+    } else {
+      // Set default values if no data is found
+      setFlashcardsClicked(0);
+      setCumulativeScore(0);
     }
   };
 
