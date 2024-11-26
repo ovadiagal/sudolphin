@@ -1,8 +1,8 @@
-import React from "react";
-import { useDropzone } from "react-dropzone";
-import { FaUpload } from "react-icons/fa";
-import { toast } from "sonner";
-import { createClient } from "@/utils/supabase/client";
+import React from 'react';
+import { useDropzone } from 'react-dropzone';
+import { FaUpload } from 'react-icons/fa';
+import { toast } from 'sonner';
+import { createClient } from '@/utils/supabase/client';
 
 interface FileUploadAreaProps {
   classId: string;
@@ -19,11 +19,11 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   const onDrop = React.useCallback(
     async (acceptedFiles: File[]) => {
       setUploading(true);
-      toast.info("Uploading files...");
+      toast.info('Uploading files...');
 
       for (const file of acceptedFiles) {
         const { error } = await supabase.storage
-          .from("class-files")
+          .from('class-files')
           .upload(`${classId}/${file.name}`, file);
 
         if (error) {
@@ -32,11 +32,11 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         }
       }
 
-      toast.success("Upload complete!");
+      toast.success('Upload complete!');
       fetchFiles();
       setUploading(false);
     },
-    [classId, supabase.storage, fetchFiles],
+    [classId, supabase.storage, fetchFiles]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -50,19 +50,19 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
       className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
             ${
               isDragActive
-                ? "border-primary bg-primary/10"
-                : "border-gray-300 hover:border-primary"
+                ? 'border-primary bg-primary/10'
+                : 'border-gray-300 hover:border-primary'
             }
-            ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+            ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <input {...getInputProps()} />
       <FaUpload className="mx-auto mb-2 text-2xl" />
       <p className="text-sm text-muted-foreground">
         {uploading
-          ? "Uploading..."
+          ? 'Uploading...'
           : isDragActive
-            ? "Drop files here"
-            : "Drag and drop files here, or click to select"}
+            ? 'Drop files here'
+            : 'Drag and drop files here, or click to select'}
       </p>
     </div>
   );

@@ -1,19 +1,19 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
-import { GeistSans } from "geist/font/sans";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "sonner";
-import Link from "next/link";
-import "./globals.css";
+import { EnvVarWarning } from '@/components/env-var-warning';
+import HeaderAuth from '@/components/header-auth';
+import { hasEnvVars } from '@/utils/supabase/check-env-vars';
+import { GeistSans } from 'geist/font/sans';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from 'sonner';
+import Link from 'next/link';
+import './globals.css';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+  : 'http://localhost:3000';
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Sudolphin",
+  title: 'Sudolphin',
 };
 
 export default function RootLayout({
@@ -36,7 +36,7 @@ export default function RootLayout({
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                 <div className="w-ful w-4/5 flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"} className="text-lg">
+                    <Link href={'/'} className="text-lg">
                       Sudolphin
                     </Link>
                   </div>

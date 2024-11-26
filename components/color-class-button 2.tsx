@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useTransition } from "react";
-import { updateClassColor } from "@/app/actions/class";
-import { toast } from "sonner";
-import { FaEdit } from "react-icons/fa";
-import { IoCloseSharp } from "react-icons/io5";
+import { useState, useTransition } from 'react';
+import { updateClassColor } from '@/app/actions/class';
+import { toast } from 'sonner';
+import { FaEdit } from 'react-icons/fa';
+import { IoCloseSharp } from 'react-icons/io5';
 
 const COLORS = [
-  "#ef4444", // red
-  "#f97316", // orange
-  "#84cc16", // lime
-  "#22c55e", // green
-  "#06b6d4", // cyan
-  "#3b82f6", // blue
-  "#a855f7", // purple
-  "#ec4899", // pink
+  '#ef4444', // red
+  '#f97316', // orange
+  '#84cc16', // lime
+  '#22c55e', // green
+  '#06b6d4', // cyan
+  '#3b82f6', // blue
+  '#a855f7', // purple
+  '#ec4899', // pink
 ];
 
 const ColorClassButton = ({
@@ -34,10 +34,10 @@ const ColorClassButton = ({
     startTransition(async () => {
       try {
         await updateClassColor(classId, selectedColor);
-        toast.success("Class color updated successfully!");
+        toast.success('Class color updated successfully!');
         setIsOpen(false); // Close the panel after success
       } catch (error) {
-        toast.error("Failed to update class color");
+        toast.error('Failed to update class color');
         console.error(error);
       }
     });
@@ -75,7 +75,7 @@ const ColorClassButton = ({
           </div>
 
           <div className="flex gap-3 flex-wrap mb-4">
-            {COLORS.map((color) => (
+            {COLORS.map(color => (
               <button
                 key={color}
                 type="button"
@@ -83,8 +83,8 @@ const ColorClassButton = ({
                 onClick={() => setSelectedColor(color)}
                 className={`w-6 h-6 rounded-full transition-transform ${
                   selectedColor === color
-                    ? "scale-110 ring-2 ring-offset-2 ring-black"
-                    : ""
+                    ? 'scale-110 ring-2 ring-offset-2 ring-black'
+                    : ''
                 }`}
                 style={{ backgroundColor: color }}
               />
@@ -95,10 +95,10 @@ const ColorClassButton = ({
             onClick={handleSubmit}
             disabled={isPending}
             className={`w-full py-2 rounded text-white bg-black hover:bg-zinc-800 disabled:bg-black/50 ${
-              isPending ? "cursor-wait" : ""
+              isPending ? 'cursor-wait' : ''
             }`}
           >
-            {isPending ? "Updating..." : "Update"}
+            {isPending ? 'Updating...' : 'Update'}
           </button>
         </div>
       )}
