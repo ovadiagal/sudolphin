@@ -39,6 +39,8 @@ export default function FileGallery({ classId }: { classId: string }) {
   const [selectedCribSheetIndex, setSelectedCribSheetIndex] = useState<number | null>(null);
   const [parsedFlashcards, setParsedFlashcards] = useState<Flashcard[]>([]);
   const [parsedTests, setParsedTests] = useState<GeneratedItem[]>([]);
+  const [flashcardsClicked, setFlashcardsClicked] = useState(0);
+  const [cumulativeScore, setCumulativeScore] = useState(0);
   const supabase = createClient();
 
   // Fetch files
@@ -112,9 +114,31 @@ export default function FileGallery({ classId }: { classId: string }) {
     );
   };
 
+  // Fetch statistics from Supabase
+  const fetchStatistics = async () => {
+    const { data, error } = await supabase
+      .from('user_statistics')
+      .select('flashcards_clicked, cumulative_score')
+      .eq('user_id', classId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching statistics:', error);
+      toast.error('Error loading statistics');
+      return;
+    }
+
+    if (data) {
+      console.log('Fetched statistics:', data);
+      setFlashcardsClicked(data.flashcards_clicked);
+      setCumulativeScore(data.cumulative_score);
+    }
+  };
+
   useEffect(() => {
     fetchFiles();
     fetchGeneratedContent();
+    fetchStatistics();
   }, [classId]);
 
   const handleFileClick = (file: FileObject) => {
@@ -213,6 +237,25 @@ export default function FileGallery({ classId }: { classId: string }) {
     toast.dismiss();
   };
 
+  const handleFlashcardClick = async () => {
+    setFlashcardsClicked(flashcardsClicked + 1);
+
+    // Persist to Supabase
+    await supabase
+      .from('user_statistics')
+      .upsert({ user_id: classId, flashcards_clicked: flashcardsClicked + 1, cumulative_score: cumulativeScore });
+  };
+
+  const handleTestCompletion = async (score: number) => {
+    const newCumulativeScore = cumulativeScore + score;
+    setCumulativeScore(newCumulativeScore);
+
+    // Persist to Supabase
+    await supabase
+      .from('user_statistics')
+      .upsert({ user_id: classId, flashcards_clicked: flashcardsClicked, cumulative_score: newCumulativeScore });
+  };
+
   useEffect(() => {
     if (generatedFlashCards.length > 0) {
       const allFlashcards: Flashcard[] = [];
@@ -256,6 +299,16 @@ export default function FileGallery({ classId }: { classId: string }) {
 
   return (
     <div className="flex flex-col">
+      {/* Display statistics */}
+      <div className="mb-4 p-4 border rounded-lg shadow-md bg-white">
+        <h3 className="text-lg font-semibold mb-2">Statistics</h3>
+        <p className="text-gray-700 text-xl font-bold mb-1">
+          Flashcards Clicked: <span className="text-green-500">{flashcardsClicked}</span>
+        </p>
+        <p className="text-gray-700 text-xl font-bold">
+          Correct Practice Quiz Answers: <span className="text-green-500">{cumulativeScore}</span>
+        </p>
+      </div>
       <div className="flex gap-4">
         {/* Left Side: File Upload and List */}
         <div className="w-1/2 flex flex-col gap-4 border p-4 rounded-lg shadow-md bg-white">
@@ -305,7 +358,7 @@ export default function FileGallery({ classId }: { classId: string }) {
         <div className="w-1/12"></div>
 
         {/* Right Side: Generated Content */}
-        <div className="w-1/2 flex flex-col gap-4 border p-4 rounded-lg shadow-md bg-white">
+        <div className="w-2/3 flex flex-col gap-4 border p-4 rounded-lg shadow-md bg-white">
           {/* Generated Tests */}
           <GeneratedContent
             title="Generated Tests"
@@ -343,7 +396,6 @@ export default function FileGallery({ classId }: { classId: string }) {
                   e.stopPropagation();
                   if (item.id) {
                     handleDeleteGeneratedContent('flashcard', item.id);
-                    console.log(index);
                   }
                 }}
               >
@@ -366,7 +418,6 @@ export default function FileGallery({ classId }: { classId: string }) {
                   e.stopPropagation();
                   if (item.id) {
                     handleDeleteGeneratedContent('cribsheet', item.id);
-                    console.log(index);
                   }
                 }}
               >
@@ -380,13 +431,13 @@ export default function FileGallery({ classId }: { classId: string }) {
       {/* Interactive Flashcards */}
       <div className="flashcard-app mt-8 border p-4 rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-4">Interactive Flashcards</h2>
-        <FlashcardApp flashcards={parsedFlashcards} />
+        <FlashcardApp flashcards={parsedFlashcards} onFlashcardClick={handleFlashcardClick} />
       </div>
 
       {/* Interactive Practice Quiz */}
       <div className="test-app mt-8 border p-4 rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-4">Interactive Practice Quiz</h2>
-        <TestApp tests={parsedTests} />
+        <TestApp tests={parsedTests} onTestCompletion={handleTestCompletion} />
       </div>
     </div>
   );

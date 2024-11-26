@@ -13,9 +13,10 @@ interface Question {
 
 interface TestAppProps {
   tests: { fileName: string; content: string }[];
+  onTestCompletion: (score: number) => void; // Add this prop to handle test completion event
 }
 
-export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
+export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [parsedQuestions, setParsedQuestions] = useState<Question[]>([]);
   const [score, setScore] = useState(0);
@@ -86,6 +87,7 @@ export const TestApp: React.FC<TestAppProps> = ({ tests }) => {
       setCurrentIndex(currentIndex + 1);
     } else {
       setShowModal(true);
+      onTestCompletion(score); // Call the onTestCompletion prop when the test is completed
     }
   };
 
