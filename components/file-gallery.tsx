@@ -87,7 +87,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     setFiles(filteredFilesWithUrls);
   };
 
-  // Fetch generated content
+  // Fetch Generated Content
   const fetchGeneratedContent = async () => {
     const { data, error } = await supabase
       .from('generated_content')
