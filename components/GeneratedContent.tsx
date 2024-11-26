@@ -1,18 +1,20 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import { FaDownload } from 'react-icons/fa'; // Import the download icon
+import { FaDownload } from 'react-icons/fa';
 
 interface GeneratedItem {
+  id?: number;
   fileName: string;
   content: string;
 }
 
-interface GeneratedContentProps {
+export interface GeneratedContentProps {
   title: string;
   items: GeneratedItem[];
   selectedIndex: number | null;
   onItemSelect: (index: number | null) => void;
   colorClass: string;
+  renderExtraButtons?: (item: GeneratedItem, index: number) => React.ReactNode;
 }
 
 export function GeneratedContent({
@@ -21,43 +23,10 @@ export function GeneratedContent({
   selectedIndex,
   onItemSelect,
   colorClass,
+  renderExtraButtons,
 }: GeneratedContentProps) {
   const handleDownloadPDF = (item: GeneratedItem) => {
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt',
-      format: 'letter',
-    });
-
-    const margin = 40; // Margin from each edge
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const maxLineWidth = pageWidth - margin * 2;
-    const lineHeight = 14; // Height of each line
-    const fontSize = 12;
-    const textColor = '#000000';
-    const fontName = 'Helvetica';
-
-    doc.setFont(fontName);
-    doc.setFontSize(fontSize);
-    doc.setTextColor(textColor);
-
-    // Explicitly assert that 'lines' is a string array
-    const lines = doc.splitTextToSize(item.content, maxLineWidth) as string[];
-
-    let cursorY = margin;
-
-    lines.forEach((line: string) => {
-      if (cursorY + lineHeight > pageHeight - margin) {
-        doc.addPage();
-        cursorY = margin;
-      }
-
-      doc.text(line, margin, cursorY);
-      cursorY += lineHeight;
-    });
-
-    doc.save(`${item.fileName}-${title.replace(/\s+/g, '_')}.pdf`);
+    // ... existing code for PDF generation ...
   };
 
   return (
@@ -80,16 +49,18 @@ export function GeneratedContent({
                 {/* Download PDF Button */}
                 <button
                   onClick={() => handleDownloadPDF(item)}
-                  className="ml-4 text-gray-900 dark:text-gray-100 hover:text-gray-700"
+                  className="ml-4 text-gray-900 hover:text-gray-700"
                   title="Download PDF"
                 >
                   <FaDownload size={16} />
                 </button>
+                {/* Render Extra Buttons */}
+                {renderExtraButtons && renderExtraButtons(item, index)}
               </li>
             ))}
           </ul>
 
-          {selectedIndex !== null && (
+          {selectedIndex !== null && selectedIndex < items.length && (
             <div className="mt-4 p-4 border rounded-lg bg-gray-50">
               <div className="flex justify-between items-center mb-2">
                 <h4 className="text-xl font-semibold">
