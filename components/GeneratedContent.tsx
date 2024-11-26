@@ -108,7 +108,7 @@ export function GeneratedContent({
                 {/* Share PDF Button */}
                 <button
                   onClick={() => handleSharePDF(item)}
-                  className="ml-4 text-gray-900 hover:text-gray-700"
+                  className="ml-4 text-gray-700 hover:text-gray-700"
                   title="Share PDF"
                 >
                   <FaShareAlt size={16} />
