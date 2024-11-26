@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function createClass(
-  formData: FormData
+  formData: FormData,
 ): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
@@ -37,7 +37,7 @@ export async function createClass(
 }
 
 export async function deleteClass(
-  classId: string
+  classId: string,
 ): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
@@ -81,7 +81,7 @@ export async function deleteClass(
 
 export async function updateClassColor(
   classId: string,
-  newColor: string
+  newColor: string,
 ): Promise<{ success: boolean }> {
   const supabase = await createClient();
 

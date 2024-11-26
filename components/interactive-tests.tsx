@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface Option {
   label: string;
@@ -16,13 +16,16 @@ interface TestAppProps {
   onTestCompletion: (score: number) => void; // Add this prop to handle test completion event
 }
 
-export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => {
+export const TestApp: React.FC<TestAppProps> = ({
+  tests,
+  onTestCompletion,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [parsedQuestions, setParsedQuestions] = useState<Question[]>([]);
   const [score, setScore] = useState(0);
   const [attemptedQuestions, setAttemptedQuestions] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
-  const [testName, setTestName] = useState('');
+  const [testName, setTestName] = useState("");
   const [showScore, setShowScore] = useState(false);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
         setTestName(test.fileName);
 
         // Split the content by '---' to get individual questions
-        const entries = content.split('---');
+        const entries = content.split("---");
 
         entries.forEach((entry) => {
           const trimmedEntry = entry.trim();
@@ -58,7 +61,9 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
             }
 
             // Extract correct answer
-            const correctAnswerMatch = trimmedEntry.match(/Correct answer:\s*([A-D])/m);
+            const correctAnswerMatch = trimmedEntry.match(
+              /Correct answer:\s*([A-D])/m,
+            );
             if (!correctAnswerMatch) return;
 
             const correctAnswerLabel = correctAnswerMatch[1];
@@ -78,7 +83,7 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : parsedQuestions.length - 1
+      prevIndex > 0 ? prevIndex - 1 : parsedQuestions.length - 1,
     );
   };
 
@@ -112,20 +117,28 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
     <div className="test-carousel">
       {!showScore ? (
         <>
-          <TestComponent 
-            question={parsedQuestions[currentIndex]} 
+          <TestComponent
+            question={parsedQuestions[currentIndex]}
             onCorrectAnswer={() => {
               if (!attemptedQuestions.has(currentIndex)) {
                 setScore(score + 1);
-                setAttemptedQuestions(new Set(attemptedQuestions).add(currentIndex));
+                setAttemptedQuestions(
+                  new Set(attemptedQuestions).add(currentIndex),
+                );
               }
             }}
           />
           <div className="flex justify-between mt-4">
-            <button onClick={handlePrev} className="px-4 py-2 bg-gray-300 rounded">
+            <button
+              onClick={handlePrev}
+              className="px-4 py-2 bg-gray-300 rounded"
+            >
               Previous
             </button>
-            <button onClick={handleNext} className="px-4 py-2 bg-gray-300 rounded">
+            <button
+              onClick={handleNext}
+              className="px-4 py-2 bg-gray-300 rounded"
+            >
               Next
             </button>
           </div>
@@ -135,11 +148,19 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
           {showModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded shadow-lg">
-                <h1 className="text-2xl mb-4">Your Score: {score} / {parsedQuestions.length}</h1>
-                <button onClick={handleDismiss} className="px-4 py-2 bg-black hover:bg-zinc-800 disabled:bg-black/50 text-white rounded mr-2">
+                <h1 className="text-2xl mb-4">
+                  Your Score: {score} / {parsedQuestions.length}
+                </h1>
+                <button
+                  onClick={handleDismiss}
+                  className="px-4 py-2 bg-black hover:bg-zinc-800 disabled:bg-black/50 text-white rounded mr-2"
+                >
                   Dismiss
                 </button>
-                <button onClick={handleRetake} className="px-4 py-2 bg-green-500 text-white rounded">
+                <button
+                  onClick={handleRetake}
+                  className="px-4 py-2 bg-green-500 text-white rounded"
+                >
                   Retake Test
                 </button>
               </div>
@@ -149,8 +170,13 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
       ) : (
         <div className="mt-4 text-left p-4 bg-white shadow-lg">
           <h2>{testName}</h2>
-          <p>Your Score: {score} / {parsedQuestions.length}</p>
-          <button onClick={handleRetake} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+          <p>
+            Your Score: {score} / {parsedQuestions.length}
+          </p>
+          <button
+            onClick={handleRetake}
+            className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+          >
             Retake Test
           </button>
         </div>
@@ -159,8 +185,13 @@ export const TestApp: React.FC<TestAppProps> = ({ tests, onTestCompletion }) => 
   );
 };
 
-const TestComponent: React.FC<{ question: Question, onCorrectAnswer: () => void }> = ({ question, onCorrectAnswer }) => {
-  const [selectedOptionLabel, setSelectedOptionLabel] = useState<string | null>(null);
+const TestComponent: React.FC<{
+  question: Question;
+  onCorrectAnswer: () => void;
+}> = ({ question, onCorrectAnswer }) => {
+  const [selectedOptionLabel, setSelectedOptionLabel] = useState<string | null>(
+    null,
+  );
   const [showAnswer, setShowAnswer] = useState(false);
 
   // Reset state when question changes
@@ -187,10 +218,10 @@ const TestComponent: React.FC<{ question: Question, onCorrectAnswer: () => void 
             onClick={() => handleOptionClick(option.label)}
             className={`block w-full text-left px-4 py-2 border rounded ${
               showAnswer && option.label === question.correctAnswer
-                ? 'bg-green-100'
+                ? "bg-green-100"
                 : showAnswer && option.label === selectedOptionLabel
-                ? 'bg-red-100'
-                : 'bg-white'
+                  ? "bg-red-100"
+                  : "bg-white"
             }`}
           >
             {option.label}) {option.text}
