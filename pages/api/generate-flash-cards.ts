@@ -44,7 +44,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
         {
           role: 'user',
-          content: `Generate flash cards based on the following content:\n\n${extractedText}`,
+          content: `Generate flash cards based on the following content:\n\n${extractedText}
+                    Do not return anything other than the flash cards. Ensure that there is a 
+                    line as such: --- between each question and that each flashcard is numbered. Do not 
+                    return asterisks in your answer. The questions should be formatted as such:
+          
+                    Flashcard 1
+                    Q: Who is the artist behind the website provided in the document?
+                    A: Suren Manvelyan
+
+                    ---
+
+                    Flashcard 2
+                    Q: What is the URL for Suren Manvelyan's gallery mentioned in the document?
+                    A: http://www.surenmanvelyan.com/gallery/7116
+          `,
         },
       ],
       max_tokens: 1500,

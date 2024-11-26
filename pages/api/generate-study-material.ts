@@ -44,7 +44,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
         {
           role: 'user',
-          content: `Generate a practice test based on the following content:\n\n${extractedText}`,
+          content: `Generate a practice test based on the following content:\n\n${extractedText}. The practice test should be multiple choice, with four choices and a "correct answer" line containing the letter corresponding to the correct answer.
+                    Do not return anything other than the practice test itself. Ensure that there is a line as such: --- between each question and that each question is numbered. Do not return asterisks in your answer. The questions should be formatted as such: 
+                    1. What does it mean if SAT is in co-NP? 
+                    A) SAT is NP-complete
+                    B) SAT's complement is in NP
+                    C) NP and co-NP are equal
+                    D) All languages in NP can be reduced to SAT
+                    Correct answer: B
+                    
+                    ---
+
+                    2. If P = NP, what can be said about every language in P? 
+                    A) They are all decidable
+                    B) They are all NP-complete except for ∅ and Σ*
+                    C) They can be solved in exponential time
+                    D) They have no relationship to NP-completeness
+                    Correct answer: B
+
+                    `,
         },
       ],
       max_tokens: 1500,
