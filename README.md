@@ -91,8 +91,6 @@ or
   - **Solution:** Ensure all dependencies are installed by running `npm ci` again.
 
 
-Work Done By: Gal Ovadia, Rana Myneni, Matthew Perry, Cas Copeland, Jacob Kotzian, Maeci Frank
-
 ### Release Notes
 
 #### v0.1.0
@@ -119,3 +117,6 @@ Bug fixes in this release:
 Known bugs in this release:
 
 - Forgot password redirects to wrong page
+
+
+Work Done By: Gal Ovadia, Rana Myneni, Matthew Perry, Cas Copeland, Jacob Kotzian, Maeci Frank
