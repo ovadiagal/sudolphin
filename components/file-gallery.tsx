@@ -114,7 +114,7 @@ export default function FileGallery({ classId }: { classId: string }) {
     );
   };
 
-  // Fetch statistics from Supabase
+  // Fetch Statistics from Supabase
   const fetchStatistics = async () => {
     const { data, error } = await supabase
       .from('user_statistics')
