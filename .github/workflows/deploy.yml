@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env.production
           echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env.production
-          echo "NEXT_PUBLIC_OPENAI_API_KEY=${{ secrets.NEXT_PUBLIC_OPENAI_API_KEY }}" >> .env.production
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env.production
 
       - name: Build Next.js application
         run: npm run build
@@ -47,11 +47,12 @@ jobs:
         run: |
           sed -i "s|SUPABASE_URL_PLACEHOLDER|${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}|g" app.yaml
           sed -i "s|SUPABASE_ANON_KEY_PLACEHOLDER|${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}|g" app.yaml
+          sed -i "s|OPENAI_API_KEY_PLACEHOLDER|${{ secrets.OPENAI_API_KEY }}|g" app.yaml
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: "${{ secrets.GOOGLE_CLOUD_KEY }}"
+          credentials_json: '${{ secrets.GOOGLE_CLOUD_KEY }}'
 
       - name: Deploy to App Engine
         run: gcloud app deploy --quiet --project=sudolphin

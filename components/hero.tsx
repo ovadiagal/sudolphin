@@ -13,7 +13,7 @@ export default function Header() {
         <div className="bg-white p-8 rounded-lg border relative z-10 text-center mt-64">
           <p className="text-4xl">Welcome to Sudolphin 🐬</p>
           <p className="text-2xl mt-4">Learn something new 🧠</p>
-          {process.env.NEXT_PUBLIC_OPENAI_API_KEY ? null : (
+          {process.env.OPENAI_API_KEY ? null : (
             <p className="text-m mt-4">OpenAI key missing 🚨</p>
           )}
         </div>{' '}
