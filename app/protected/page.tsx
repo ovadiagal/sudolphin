@@ -14,7 +14,7 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <div className="flex-1 self-center w-4/5 flex flex-col">
+    <div className="flex-1 self-center w-4/5 flex flex-col mt-16">
       <h3 className="font-bold text-2xl mb-4">Your Classes</h3>
       <div className="flex flex-wrap gap-4">
         <ClassTiles />
