@@ -83,31 +83,84 @@ TODO: Add Windsurf Justification
 
 ### Minimum Marketable Features (MMFs)
 
-1. Create and delete classes:
-Users can create and delete classes they are enrolled in
+1. Create and delete classes: Users can create and delete classes they are enrolled in
+2. Educational material upload: Users can upload and delete their educational materials in PDF format
+3. AI-Generated study resources: Users can generate personalized study aids from uploaded materials.
+4. Mastery statistics: A centralized hub for users to interact with and manage their study materials.
+5. Sharing: Users can natively export the generated materials via iMessage, Airdrop, etc.
 
-2. Educational material upload:
-Users can upload and delete their educational materials in PDF format
-
-3. AI-Generated study resources:
-Users can generate personalized study aids from uploaded materials.
-
-4. Mastery statistics:
-A centralized hub for users to interact with and manage their study materials.
-
-5. Sharing:
-Users can natively export the generated materials via iMessage, Airdrop, etc.
-
+See Functional Requirements for more information on each MMF.
 
 ### Functional Requirements
+1. User Authentication and Profile Management
+
+- User Registration: Users must be able to create an account using their email and a secure password.
+- Secure Login/Logout: Users must be able to log in and out securely, with session management handled appropriately.
+- Password Recovery: Users should have the ability to reset their password in case they forget it.
+
+2. Course Creation and Management
+
+- Create Courses: Users can create new courses or classes they are enrolled in, specifying course names and details.
+- Delete Courses: Users can delete existing courses that they no longer need.
+- Course Listing: Users can view a list of all their courses on a personalized dashboard.
+- Edit courses: Users can customize the view of the courses
+  
+3. Educational Material Upload
+
+- File Upload: Users can upload educational materials in PDF format to specific courses.
+- File Deletion: Users can delete previously uploaded materials.
+- Multiple File Support: The system should support uploading multiple files at once.
+  
+4. AI-Generated Study Resources
+
+- Generate Study Aids: Users can request the generation of personalized study aids based on their uploaded materials.
+- Types of Study Aids: The platform can generate flashcards, practice questions, quizzes, and summary sheets.
+- Customization: Users can select which type of study aid they want to generate for each material.
+
+5. Mastery Statistics
+
+- Progress Tracking: Users can view statistics on their performance with the study aids.
+- Performance Metrics: The platform provides insights into areas of strength and improvement.
+- Historical Data: Users can track their progress over time.
+
+6. Sharing and Exporting
+
+- Export Materials: Users can export generated study aids.
+- Sharing Options: Exported materials can be shared via iMessage, AirDrop, email, and other platforms.
+- Format Compatibility: Ensure that exported files are in formats compatible with common devices and applications.
 
 ### Non-Functional Requirements
 
-- App must work for all modern browser engines (Chromium, Firefox, Webkit)
+1. Cross-Browser Compatibility
+- The application must function seamlessly on all modern web browsers, including Chromium-based browsers (e.g., Google Chrome), Firefox, and WebKit-based browsers (e.g., Safari).
+
+2. Performance
+- Responsiveness: The user interface should respond to user actions within 200 milliseconds.
+- Processing Time: The system should process uploads and generate study materials within a reasonable time frame (ideally under 2 minutes per request).
+  
+3. Scalability
+- The platform must handle multiple concurrent users without performance degradation.
+- The architecture should support future enhancements and increased user load.
+  
+4. Security
+- Data Protection: User data must be stored securely, with appropriate encryption.
+- Authentication Security: Implement measures to protect against unauthorized access.
+
+5. Usability
+- User-Friendly Interface: The platform should be intuitive and easy to navigate.
+- Consistency: Maintain a consistent look and feel throughout the application.
+  
+6. Reliability
+- Uptime: The system should have high availability, aiming for 99.9% uptime.
+- API Availability: The OpenAI API should fail for < 5% of requests.
+- Error Handling: Provide informative error messages.
 
 ### Requirement Priority
 
-
+After coming up with the idea for our project, the MMFs were easy to identify as these were the core aspects of our service. We especially prioritized
+the first three MMFs, since these encapsulated the core requirements. If users couldn't create a class, upload material, and generate AI content, this 
+app would not be viable at all as a product. Therefore, we focused on these MMFs first. The statistics and sharing MMFs, while still important to our app,
+were not considered as crucial as the other three, as these are nice-to-have but not mandatory. 
 
 ## Design (30 Points)
 
