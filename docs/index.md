@@ -232,11 +232,6 @@ export async function updateClassColor(
 
 ## Testing Strategy, Execution, and AI Tool Analysis (60 points)
 
-- Elaborate on the Test Strategy, including whitebox and blackbox testing methods. List various tools used for testing and explain their purpose.
-- Provide detailed test cases and their outcomes.
-- Discuss the AI tools used in blackbox and whitebox testing.
-- Offer a comparative analysis on the performance, usability, and impact of these tools on productivity and quality, including metrics and statistical evidence. (30 points)
-
 ### Test Strategy
 
 #### Testing Process
