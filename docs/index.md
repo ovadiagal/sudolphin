@@ -114,6 +114,10 @@ Users can natively export the generated materials via iMessage, Airdrop, etc.
 - Present architectural design diagrams.
 - Explain your design decisions and their impact.
 
+
+![Example Image](chatuml-diagram.png)
+
+
 ## Design Patterns Implementation (30 points)
 
 ### Factory Method
