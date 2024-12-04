@@ -296,7 +296,33 @@ We solved this by using prompts that defined a detailed structure for the output
 - Summarize the final outputs, emphasizing the effectiveness/non-effectiveness of AI tools in achieving project goals.
 - Critically assess the project outcomes relative to the initial objectives and provide a quantitative and qualitative evaluation.
 
+The end result of our project is a fully functional, AI-driven educational platform that successfully allows users to upload their academic 
+materials and receive personalized study aids like flashcards, quizzes, and summary sheets. The integration of AI tools, particularly OpenAI's API, 
+was highly effective in generating accurate and relevant study content tailored to individual user inputs. Development tools such as GitHub Copilot 
+and ChatGPT significantly enhanced our coding efficiency and debugging processes, allowing us to meet our project milestones ahead of schedule. Some areas
+where AI wasn't as effective was in the API calls and in test generation. While the OpenAI API was on v4, we were getting responses relating to v3 of the
+API, which resulted in deprecated calls and inefficient generation. This was not solved by AI since it didn't have access to the internet, but we were able to 
+fix these problems by reading through documentation and forums. Furthermore, in test generation AI gave us a good foundation to start off of, but it
+still required many manual tweaks to integrate with our codebase. Ultimately, though, these tools streamlined complex tasks and contributed to higher code 
+quality and maintainability.
+
+Critically assessing the project outcomes relative to our initial objectives, we achieved all our Minimum Marketable Features and met both 
+functional and non-functional requirements. 
+
+For a quantitative evaluation, like in project 1 we again did a control vs experimental test. For the interactive flashcards, one team member used AI tools
+like ChatGPT o-1-preview and Copilot and another member strictly relied on traditional tools like Stack Overflow and documentation. We found an extremely significant
+difference between the two, as the total development time to create the interactive flashscards using AI was only around 10 minutes while not using AI ended up taking 
+over an hour. Furthermore, we found that with AI there was almost no incorrectly parsed flashcards (only around 1 out of 20), while without AI there was a lot of errors
+(about half of the flashcards displayed incorrectly parsed flashcards). For additional quantitative impacts, with AI new features took around 15 minutes on average to 
+implement, which would have been drastically higher without AI. 
+
+Qualitatively, our team was very satisfied with the platform's usability and the relevance of the generated study aids. The AI consistently delivered features with a 
+really good UI, and it didn't require too many prompts to help us. However, while the AI tools greatly enhanced productivity and output quality, we encountered challenges in 
+ensuring consistent formatting of AI-generated content, which required much stricter manual prompting. Overall, the project effectively met its goals, demonstrating 
+the significant positive impact of AI tools on both the development process and the end product.
+
 ## Future Directions (10 points)
 
 - Suggest potential enhancements or future research opportunities based on your findings.
 - Discuss possible improvements to AI tool usage or alternative tools that could be explored.
+
