@@ -323,6 +323,7 @@ the significant positive impact of AI tools on both the development process and 
 
 ## Future Directions (10 points)
 
-- Suggest potential enhancements or future research opportunities based on your findings.
-- Discuss possible improvements to AI tool usage or alternative tools that could be explored.
+For future enhancements we can allow users to generate more study materials, such as fill-in-the blank questions and maybe math problem
+solving. Another option is to allow users to generate prompts as well, although this might call into question potential issues of Honor Code violations. We could also look into using more advanced AI models as they are developed and released for API usage. Models like o-1-preview could really generate better material due to its high reasoning capabilities, and we could also explore other sources like Anthropic or Google to have a better variety of models.
 
+For specific features, one that is crucial to add as well is image analysis. Currently, since we are parsing PDFs before sending them to OpenAI we lose image content, and as such the generated material can't take this context into account. Determining an alternate way to send PDFs to OpenAI, whether it is parsing the image as well or just sending the entire PDF to OpenAI, could really help improve our app and give our users better content to study. We do have to take into account costs for this though, as images will be more expensive than plain text. Other features could potentially include providing generated feedback, such as detailed explanation of quiz questions and study plans to help users improve over time.
