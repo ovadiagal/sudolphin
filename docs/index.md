@@ -281,9 +281,6 @@ Together, Playwright and AI tools make testing faster, more reliable, and easier
 
 ## Challenges and Innovations (15 points)
 
-- Detail challenges faced during the project and the innovative solutions implemented. This could be related to adoption of AI tools, testing technologies, or other aspects.
-- Highlight unique technological or methodological approaches that distinguished your project.
-
 One challenge we faced was in black-box testing, where our end-to-end tests were not idempotent due the database not being reset between tests.
 This caused tests to fail when run in parallel, as the interaction order with the database was not guaranteed.
 To solve this, we forced GitHub Actions to run the tests sequentially, and only have a single test runner at a time.
