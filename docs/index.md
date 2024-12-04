@@ -4,11 +4,6 @@
 
 ## Introduction/Background (10 points)
 
-- Provide an in-depth overview of Project 2's objectives and the chosen technology stack.
-- Offer an overview of the project's context and significance.
-- Define the project scope and your project management approach.
-- Discuss related work and how your project aligns with or diverges from existing solutions or methodologies.
-
 The project is an AI-driven educational platform where users can upload their academic materials such as lecture slides, practice exams, homework assignments, syllabi, etc.
 Utilizing OpenAI's API, the platform processes the uploaded materials to generate customized study aids, including flashcards, practice questions, quizzes, and concise summary sheets (crib sheets).
 This platform aims to enhance user learning experience by providing personalized and adaptive study resources.
@@ -21,9 +16,6 @@ Good AI generation requires a lot of context, which is why course material manag
 
 
 ## Software Technologies (15 points)
-
-- Detail the technologies, frameworks, and AI tools used, including any crucial libraries or frameworks.
-- Discuss the rationale for selecting specific AI tools and design patterns.
 
 ### Frontend & Backend Tech Stacks
 
@@ -76,10 +68,6 @@ Windsurf:
 TODO: Add Windsurf Justification
 
 ## Requirements (20 Points)
-
-- Document both Functional and Non-Functional Requirements.
-- Make sure to mention the 4 MMFs in detail here.
-- Discuss the process of identifying and prioritizing these requirements.
 
 ### Minimum Marketable Features (MMFs)
 
@@ -164,11 +152,14 @@ were not considered as crucial as the other three, as these are nice-to-have but
 
 ## Design (30 Points)
 
-- Present architectural design diagrams.
-- Explain your design decisions and their impact.
+![Example Image](realsequencediagram.png)
+The sequence diagram highlights the interaction between the user, study material platform, OpenAI API, and Supabase database, prioritizing quick material generation and user engagement. Again, this design focuses on a modular and scalable system, ensuring that future improvements are seamlessly integrated. 
 
+![Example Image](classdiagram.png)
+The class diagram modular architecture supports scalability by separating responsibilities, such as user actions, file management, and study aid generation, into distinct, reusable classes. By encapsulating specific functionalities like file uploads, content generation, and preview handling, the design ensures maintainability, extensibility for future features, and an intuitive user experience that promotes efficient study material management.
 
-![Example Image](chatuml-diagram.png)
+![Example Image](ucd.png)
+The use-case diagram shown describes our desired result of a modular, user focused architecure that uses Supabase for data storage and OpenAI for creating study materials. Our modular approach allows us to implement/update more features in the future, along with creating a seamless design for users to simply drag and drop their notes. Incorporating such simplicity allows users to dive right into effective studying. 
 
 
 ## Design Patterns Implementation (30 points)
@@ -304,9 +295,6 @@ We solved this by using prompts that defined a detailed structure for the output
 
 
 ## Project Outcomes and Evaluation (10 points)
-
-- Summarize the final outputs, emphasizing the effectiveness/non-effectiveness of AI tools in achieving project goals.
-- Critically assess the project outcomes relative to the initial objectives and provide a quantitative and qualitative evaluation.
 
 The end result of our project is a fully functional, AI-driven educational platform that successfully allows users to upload their academic 
 materials and receive personalized study aids like flashcards, quizzes, and summary sheets. The integration of AI tools, particularly OpenAI's API, 
