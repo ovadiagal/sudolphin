@@ -167,6 +167,10 @@ were not considered as crucial as the other three, as these are nice-to-have but
 - Present architectural design diagrams.
 - Explain your design decisions and their impact.
 
+
+![Example Image](chatuml-diagram.png)
+
+
 ## Design Patterns Implementation (30 points)
 
 ### Factory Method
