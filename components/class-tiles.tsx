@@ -1,8 +1,8 @@
-import { createClient } from "@/utils/supabase/server";
-import CreateClass from "./create-class";
-import { DeleteClassButton } from "./delete-class-button";
-import Link from "next/link";
-import ColorClassButton from "./color-class-button";
+import { createClient } from '@/utils/supabase/server';
+import CreateClass from './create-class';
+import { DeleteClassButton } from './delete-class-button';
+import Link from 'next/link';
+import ColorClassButton from './color-class-button';
 
 export default async function ClassTiles() {
   const supabase = await createClient();
@@ -12,19 +12,19 @@ export default async function ClassTiles() {
   } = await supabase.auth.getUser();
 
   const { data: classes, error } = await supabase
-    .from("Classes")
-    .select("*")
-    .eq("user_id", user?.id)
-    .order("created_at", { ascending: false });
+    .from('Classes')
+    .select('*')
+    .eq('user_id', user?.id)
+    .order('created_at', { ascending: false });
 
   if (error) {
-    console.error("Error fetching classes:", error);
+    console.error('Error fetching classes:', error);
     return <div>Error loading classes</div>;
   }
 
   return (
     <div className="w-full flex flex-wrap gap-4">
-      {classes?.map((classItem) => (
+      {classes?.map(classItem => (
         <div
           key={classItem.id}
           className="w-[calc(25%-12px)] h-32 text-white rounded-lg relative group"
@@ -37,7 +37,10 @@ export default async function ClassTiles() {
             <span className="text-xl">{classItem.name}</span>
           </Link>
           <DeleteClassButton classId={classItem.id} />
-          <ColorClassButton classId={classItem.id} initialColor={classItem.color}/>
+          <ColorClassButton
+            classId={classItem.id}
+            initialColor={classItem.color}
+          />
         </div>
       ))}
       <CreateClass />

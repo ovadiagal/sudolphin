@@ -9,7 +9,10 @@ interface FileUploadAreaProps {
   fetchFiles: () => void;
 }
 
-export const FileUploadArea: React.FC<FileUploadAreaProps> = ({ classId, fetchFiles }) => {
+export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
+  classId,
+  fetchFiles,
+}) => {
   const [uploading, setUploading] = React.useState(false);
   const supabase = createClient();
 
@@ -58,8 +61,8 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({ classId, fetchFi
         {uploading
           ? 'Uploading...'
           : isDragActive
-          ? 'Drop files here'
-          : 'Drag and drop files here, or click to select'}
+            ? 'Drop files here'
+            : 'Drag and drop files here, or click to select'}
       </p>
     </div>
   );

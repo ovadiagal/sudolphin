@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 interface ClassHeaderProps {
   name: string;

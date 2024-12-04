@@ -1,20 +1,20 @@
-"use server";
+'use server';
 
-import { createClient } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
+import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from 'next/cache';
 
 export async function deleteFile(
   classId: string,
-  fileName: string,
+  fileName: string
 ): Promise<{ success: boolean }> {
   const supabase = await createClient();
 
   const { error } = await supabase.storage
-    .from("class-files")
+    .from('class-files')
     .remove([`${classId}/${fileName}`]);
 
   if (error) {
-    console.error("Error deleting file:", error);
+    console.error('Error deleting file:', error);
     throw error;
   }
 

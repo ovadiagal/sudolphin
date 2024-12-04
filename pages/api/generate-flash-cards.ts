@@ -1,13 +1,15 @@
-// pages/api/generate-study-material.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
 import pdf from 'pdf-parse';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -21,7 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const fileContentSizeBytes = Buffer.byteLength(fileContent, 'utf8');
   const fileContentSizeMB = fileContentSizeBytes / (1024 * 1024);
   console.log(`File content size: ${fileContentSizeMB} MB`);
-
 
   try {
     // Convert base64 file content to a Buffer

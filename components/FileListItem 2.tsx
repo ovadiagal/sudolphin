@@ -17,7 +17,10 @@ interface FileListItemProps {
   onFileClick: (file: FileObject) => void;
   fetchFiles: () => void;
   onGenerateTest: (file: FileObject, e: React.MouseEvent) => Promise<void>;
-  onGenerateFlashCards: (file: FileObject, e: React.MouseEvent) => Promise<void>;
+  onGenerateFlashCards: (
+    file: FileObject,
+    e: React.MouseEvent
+  ) => Promise<void>;
   onGenerateCribSheet: (file: FileObject, e: React.MouseEvent) => Promise<void>;
 }
 
@@ -63,7 +66,7 @@ export function FileListItem({
       </button>
       <div className="relative">
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             setDropdownOpen(!dropdownOpen);
           }}
@@ -75,19 +78,19 @@ export function FileListItem({
         {dropdownOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
             <button
-              onClick={(e) => onGenerateTest(file, e)}
+              onClick={e => onGenerateTest(file, e)}
               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Generate Practice Tests
             </button>
             <button
-              onClick={(e) => onGenerateFlashCards(file, e)}
+              onClick={e => onGenerateFlashCards(file, e)}
               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Generate Flash Cards
             </button>
             <button
-              onClick={(e) => onGenerateCribSheet(file, e)}
+              onClick={e => onGenerateCribSheet(file, e)}
               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Generate Crib Sheet

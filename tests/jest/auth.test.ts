@@ -1,4 +1,10 @@
-import { signInAction, signUpAction, forgotPasswordAction, resetPasswordAction, signOutAction } from '@/app/actions';
+import {
+  signInAction,
+  signUpAction,
+  forgotPasswordAction,
+  resetPasswordAction,
+  signOutAction,
+} from '@/app/actions';
 import { createClient } from '@/utils/supabase/server';
 import { encodedRedirect } from '@/utils/utils';
 import { redirect } from 'next/navigation';
@@ -18,7 +24,7 @@ describe('Authentication Actions', () => {
     } as unknown as FormData;
   };
 
-  // Setup common mocks
+  // Setup Common Mocks
   const mockSupabase = {
     auth: {
       signUp: jest.fn(),
@@ -148,7 +154,9 @@ describe('Authentication Actions', () => {
       const formData = mockFormData({
         email: 'test@example.com',
       });
-      mockSupabase.auth.resetPasswordForEmail.mockResolvedValue({ error: null });
+      mockSupabase.auth.resetPasswordForEmail.mockResolvedValue({
+        error: null,
+      });
 
       // Act
       await forgotPasswordAction(formData);
@@ -157,7 +165,8 @@ describe('Authentication Actions', () => {
       expect(mockSupabase.auth.resetPasswordForEmail).toHaveBeenCalledWith(
         'test@example.com',
         {
-          redirectTo: 'http://localhost:3000/auth/callback?redirect_to=/protected/reset-password',
+          redirectTo:
+            'http://localhost:3000/auth/callback?redirect_to=/protected/reset-password',
         }
       );
       expect(encodedRedirect).toHaveBeenCalledWith(
@@ -222,7 +231,7 @@ describe('Authentication Actions', () => {
       expect(encodedRedirect).toHaveBeenCalledWith(
         'error',
         '/protected/reset-password',
-        'Passwords do not match',
+        'Passwords do not match'
       );
     });
   });

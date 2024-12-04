@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { IoCloseSharp } from "react-icons/io5";
-import { FaTrash } from "react-icons/fa";
-import Image from "next/image";
-import { deleteFile } from "@/app/actions/file";
-import { toast } from "sonner";
+import { IoCloseSharp } from 'react-icons/io5';
+import { FaTrash } from 'react-icons/fa';
+import Image from 'next/image';
+import { deleteFile } from '@/app/actions/file';
+import { toast } from 'sonner';
 
 interface FilePreviewModalProps {
   file: {
@@ -31,11 +31,11 @@ export function FilePreviewModal({
   const handleDelete = async () => {
     try {
       await deleteFile(classId, file.name);
-      toast.success("File deleted successfully");
+      toast.success('File deleted successfully');
       onDelete();
       onClose();
     } catch (error) {
-      toast.error("Failed to delete file");
+      toast.error('Failed to delete file');
       console.error(error);
     }
   };
@@ -65,7 +65,7 @@ export function FilePreviewModal({
           </div>
         </div>
         <div className="flex-1 p-4 overflow-auto">
-          {file.name.toLowerCase().endsWith(".pdf") ? (
+          {file.name.toLowerCase().endsWith('.pdf') ? (
             <iframe
               src={file.url}
               className="w-full h-full"

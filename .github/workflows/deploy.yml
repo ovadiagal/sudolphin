@@ -1,9 +1,9 @@
 name: Deploy to Google App Engine
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -14,43 +14,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Cache Next.js build artifacts
-      uses: actions/cache@v4
-      id: nextjs-cache
-      with:
-        path: .next/cache
-        key: ${{ runner.os }}-nextjs-cache-${{ hashFiles('package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-nextjs-cache-
+      - name: Cache Next.js build artifacts
+        uses: actions/cache@v4
+        id: nextjs-cache
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-cache-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-cache-
 
-    - name: Create .env.production
-      run: |
-        echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env.production
-        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env.production
+      - name: Create .env.production
+        run: |
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env.production
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env.production
 
-    - name: Build Next.js application
-      run: npm run build
+      - name: Build Next.js application
+        run: npm run build
 
-    - name: Inject Environment Variables into app.yaml
-      run: |
-        sed -i "s|SUPABASE_URL_PLACEHOLDER|${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}|g" app.yaml
-        sed -i "s|SUPABASE_ANON_KEY_PLACEHOLDER|${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}|g" app.yaml
+      - name: Inject Environment Variables into app.yaml
+        run: |
+          sed -i "s|SUPABASE_URL_PLACEHOLDER|${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}|g" app.yaml
+          sed -i "s|SUPABASE_ANON_KEY_PLACEHOLDER|${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}|g" app.yaml
+          sed -i "s|OPENAI_API_KEY_PLACEHOLDER|${{ secrets.OPENAI_API_KEY }}|g" app.yaml
 
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: '${{ secrets.GOOGLE_CLOUD_KEY }}'
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CLOUD_KEY }}'
 
-    - name: Deploy to App Engine
-      run: gcloud app deploy --quiet --project=sudolphin
+      - name: Deploy to App Engine
+        run: gcloud app deploy --quiet --project=sudolphin

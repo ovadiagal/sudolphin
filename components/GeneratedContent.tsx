@@ -77,7 +77,9 @@ export function GeneratedContent({
     // Check if the browser supports the Web Share API
     if (navigator.share) {
       // Create a new File object from the PDF blob
-      const file = new File([pdfBlob], `${item.fileName}.pdf`, { type: 'application/pdf' });
+      const file = new File([pdfBlob], `${item.fileName}.pdf`, {
+        type: 'application/pdf',
+      });
       try {
         // Share the PDF file
         await navigator.share({
@@ -91,7 +93,9 @@ export function GeneratedContent({
       }
       // If the Web Share API is not supported, show an alert
     } else {
-      alert('Sharing is not supported in your browser. You can download the file and share it manually.');
+      alert(
+        'Sharing is not supported in your browser. You can download the file and share it manually.'
+      );
     }
   };
 
@@ -114,7 +118,7 @@ export function GeneratedContent({
                 </button>
                 {/* Share PDF Button */}
                 <button
-                // Add a new button to share the PDF
+                  // Add a new button to share the PDF
                   onClick={() => handleSharePDF(item)}
                   // Add a new class to style the button
                   className="ml-4 text-gray-700 hover:text-gray-700"
@@ -143,7 +147,6 @@ export function GeneratedContent({
                   {items[selectedIndex].fileName} - {title} {selectedIndex + 1}
                 </h4>
                 <div className="flex items-center">
-
                   <button
                     className="text-gray-600 hover:text-gray-800"
                     onClick={() => onItemSelect(null)}
@@ -153,7 +156,9 @@ export function GeneratedContent({
                   </button>
                 </div>
               </div>
-              <pre className="whitespace-pre-wrap">{items[selectedIndex].content}</pre>
+              <pre className="whitespace-pre-wrap">
+                {items[selectedIndex].content}
+              </pre>
             </div>
           )}
         </div>
