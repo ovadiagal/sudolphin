@@ -153,10 +153,13 @@ were not considered as crucial as the other three, as these are nice-to-have but
 ## Design (30 Points)
 
 ![Example Image](realsequencediagram.png)
+The sequence diagram highlights the interaction between the user, study material platform, OpenAI API, and Supabase database, prioritizing quick material generation and user engagement. Again, this design focuses on a modular and scalable system, ensuring that future improvements are seamlessly integrated. 
 
 ![Example Image](classdiagram.png)
+The class diagram modular architecture supports scalability by separating responsibilities, such as user actions, file management, and study aid generation, into distinct, reusable classes. By encapsulating specific functionalities like file uploads, content generation, and preview handling, the design ensures maintainability, extensibility for future features, and an intuitive user experience that promotes efficient study material management.
 
 ![Example Image](ucd.png)
+The use-case diagram shown describes our desired result of a modular, user focused architecure that uses Supabase for data storage and OpenAI for creating study materials. Our modular approach allows us to implement/update more features in the future, along with creating a seamless design for users to simply drag and drop their notes. Incorporating such simplicity allows users to dive right into effective studying. 
 
 
 ## Design Patterns Implementation (30 points)
@@ -292,9 +295,6 @@ We solved this by using prompts that defined a detailed structure for the output
 
 
 ## Project Outcomes and Evaluation (10 points)
-
-- Summarize the final outputs, emphasizing the effectiveness/non-effectiveness of AI tools in achieving project goals.
-- Critically assess the project outcomes relative to the initial objectives and provide a quantitative and qualitative evaluation.
 
 The end result of our project is a fully functional, AI-driven educational platform that successfully allows users to upload their academic 
 materials and receive personalized study aids like flashcards, quizzes, and summary sheets. The integration of AI tools, particularly OpenAI's API, 
