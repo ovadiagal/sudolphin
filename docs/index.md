@@ -65,7 +65,7 @@ Justification: Cursor was a standout tool during the development of Project 1 be
 
 Windsurf:
 
-TODO: Add Windsurf Justification
+Justification: Windsurf is very similar to Cursor - it is an IDE that integrates an LLM directly. This allows for context-aware conversations and codebase indexing. We found it served the same purposes as Cursor, allowing for faster iteration and seamless interactions with AI agents.
 
 ## Requirements (20 Points)
 
