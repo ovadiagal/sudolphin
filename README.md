@@ -1,5 +1,7 @@
 # Sudolphin 🐬
-## Level up your learning 🧠
+Level up your learning 🧠
+
+This is our project for CS3300 at Georgia Tech.
 
 ## Features
 
